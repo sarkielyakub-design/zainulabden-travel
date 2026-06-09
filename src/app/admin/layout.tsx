@@ -15,6 +15,9 @@ import {
   Bell,
   Search,
   ChevronRight,
+  MessageSquare,
+  Settings,
+  BarChart3,
 } from "lucide-react";
 
 import {
@@ -52,15 +55,33 @@ const links = [
   },
 
   {
+    name: "Payments",
+    href: "/admin/payments",
+    icon: CreditCard,
+  },
+
+  {
+    name: "Messages",
+    href: "/admin/messages",
+    icon: MessageSquare,
+  },
+
+  {
     name: "Users",
     href: "/admin/users",
     icon: Users,
   },
 
   {
-    name: "Payments",
-    href: "/admin/payments",
-    icon: CreditCard,
+    name: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
+  },
+
+  {
+    name: "Settings",
+    href: "/admin/settings",
+    icon: Settings,
   },
 ];
 
@@ -95,7 +116,7 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-100">
+    <div className="flex min-h-screen bg-slate-100">
 
       {/* MOBILE OVERLAY */}
       {open && (
@@ -104,14 +125,16 @@ export default function AdminLayout({
           onClick={() =>
             setOpen(false)
           }
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
         />
 
       )}
 
-      {/* SIDEBAR */}
+      {/* =========================
+         SIDEBAR
+      ========================= */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-full w-[290px] flex-col border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white shadow-[0_20px_80px_rgba(0,0,0,0.5)] transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-50 flex h-full w-[300px] flex-col overflow-hidden border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white shadow-[0_20px_100px_rgba(0,0,0,0.5)] transition-transform duration-300 lg:static lg:translate-x-0 ${
           open
             ? "translate-x-0"
             : "-translate-x-full"
@@ -119,7 +142,7 @@ export default function AdminLayout({
       >
 
         {/* TOP */}
-        <div className="border-b border-white/10 p-6">
+        <div className="border-b border-white/10 p-7">
 
           {/* MOBILE CLOSE */}
           <div className="mb-4 flex justify-end lg:hidden">
@@ -128,7 +151,7 @@ export default function AdminLayout({
               onClick={() =>
                 setOpen(false)
               }
-              className="rounded-xl border border-white/10 p-2"
+              className="rounded-2xl border border-white/10 bg-white/5 p-2"
             >
 
               <X size={22} />
@@ -137,13 +160,14 @@ export default function AdminLayout({
 
           </div>
 
-          {/* LOGO */}
+          {/* BRAND */}
           <div className="flex items-center gap-4">
 
-            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-3xl bg-white/10 backdrop-blur">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10 backdrop-blur">
 
               <img
                 src="/logo.png"
+                alt="logo"
                 className="h-12"
               />
 
@@ -151,12 +175,12 @@ export default function AdminLayout({
 
             <div>
 
-              <h1 className="text-2xl font-black tracking-tight">
+              <h1 className="text-3xl font-black tracking-tight">
                 ZAIN
               </h1>
 
-              <p className="text-sm text-green-400">
-                Admin Dashboard
+              <p className="mt-1 text-sm text-green-400">
+                Travel Agency ERP
               </p>
 
             </div>
@@ -168,17 +192,31 @@ export default function AdminLayout({
         {/* PROFILE */}
         <div className="border-b border-white/10 p-6">
 
-          <div className="rounded-3xl bg-white/5 p-5">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
 
-            <p className="text-sm text-slate-400">
-              Logged in as
-            </p>
+            <div className="flex items-center gap-4">
 
-            <h3 className="mt-2 text-lg font-black">
-              Administrator
-            </h3>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-xl font-black">
 
-            <div className="mt-3 inline-flex rounded-full bg-green-500/20 px-4 py-2 text-xs font-bold text-green-400">
+                Z
+
+              </div>
+
+              <div>
+
+                <p className="text-sm text-slate-400">
+                  Logged in as
+                </p>
+
+                <h3 className="text-lg font-black">
+                  Administrator
+                </h3>
+
+              </div>
+
+            </div>
+
+            <div className="mt-5 inline-flex rounded-full bg-green-500/20 px-4 py-2 text-xs font-bold text-green-400">
 
               Super Admin
 
@@ -189,7 +227,7 @@ export default function AdminLayout({
         </div>
 
         {/* NAVIGATION */}
-        <nav className="flex flex-1 flex-col gap-3 overflow-y-auto p-6">
+        <nav className="flex flex-1 flex-col gap-2 overflow-y-auto p-6">
 
           {links.map((item) => {
 
@@ -201,13 +239,14 @@ export default function AdminLayout({
               item.href;
 
             return (
+
               <Link
                 key={item.name}
                 href={item.href}
                 onClick={() =>
                   setOpen(false)
                 }
-                className={`group flex items-center justify-between rounded-2xl px-5 py-4 transition ${
+                className={`group flex items-center justify-between rounded-2xl px-5 py-4 transition-all duration-200 ${
                   active
                     ? "bg-green-600 text-white shadow-lg shadow-green-500/20"
                     : "text-slate-300 hover:bg-white/5 hover:text-white"
@@ -257,11 +296,13 @@ export default function AdminLayout({
 
       </aside>
 
-      {/* MAIN */}
-      <main className="flex-1">
+      {/* =========================
+         MAIN CONTENT
+      ========================= */}
+      <main className="flex-1 overflow-hidden">
 
         {/* TOPBAR */}
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur-xl">
 
           <div className="flex h-20 items-center justify-between px-4 lg:px-8">
 
@@ -273,22 +314,22 @@ export default function AdminLayout({
                 onClick={() =>
                   setOpen(true)
                 }
-                className="rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 lg:hidden"
+                className="rounded-2xl border border-slate-200 bg-white p-3 transition hover:bg-slate-50 lg:hidden"
               >
 
                 <Menu size={24} />
 
               </button>
 
-              {/* TITLE */}
+              {/* PAGE TITLE */}
               <div>
 
-                <h2 className="text-xl font-black text-slate-900 lg:text-2xl">
-                  Admin Panel
+                <h2 className="text-2xl font-black text-slate-900">
+                  Admin Dashboard
                 </h2>
 
                 <p className="hidden text-sm text-slate-500 lg:block">
-                  Manage your travel platform
+                  Manage your travel business professionally
                 </p>
 
               </div>
@@ -308,7 +349,7 @@ export default function AdminLayout({
 
                 <input
                   placeholder="Search..."
-                  className="bg-transparent outline-none"
+                  className="bg-transparent text-sm outline-none"
                 />
 
               </div>
@@ -325,10 +366,26 @@ export default function AdminLayout({
 
               </button>
 
-              {/* AVATAR */}
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-lg font-black text-white shadow-lg shadow-green-500/20">
+              {/* USER */}
+              <div className="hidden items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 lg:flex">
 
-                Z
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-green-600 font-black text-white">
+
+                  Z
+
+                </div>
+
+                <div>
+
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Admin
+                  </h4>
+
+                  <p className="text-xs text-slate-500">
+                    Super Administrator
+                  </p>
+
+                </div>
 
               </div>
 

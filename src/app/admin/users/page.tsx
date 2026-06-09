@@ -13,6 +13,9 @@ import {
   Phone,
   ShieldCheck,
   Loader2,
+  MapPin,
+  Globe,
+  CalendarDays,
 } from "lucide-react";
 
 /* =========================
@@ -34,6 +37,10 @@ type UserType = {
   email: string;
 
   phone?: string;
+
+  address?: string;
+
+  nationality?: string;
 
   role?: string;
 
@@ -71,7 +78,7 @@ export default function AdminUsers() {
 
       const response =
         await axios.get(
-          `${API}/users/`,
+          `${API}/admin/users`,
           {
             headers: {
               Authorization:
@@ -85,7 +92,6 @@ export default function AdminUsers() {
         response.data
       );
 
-      // HANDLE DIFFERENT RESPONSE SHAPES
       const usersData =
         Array.isArray(
           response.data
@@ -93,13 +99,7 @@ export default function AdminUsers() {
           ? response.data
           : response.data.data ||
             response.data.users ||
-            response.data.results ||
             [];
-
-      console.log(
-        "PARSED USERS:",
-        usersData
-      );
 
       setUsers(usersData);
 
@@ -142,23 +142,46 @@ export default function AdminUsers() {
   return (
     <div className="space-y-10">
 
-      {/* HEADER */}
-      <div>
+      {/* =========================
+         HEADER
+      ========================= */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-        <h1 className="text-5xl font-black text-slate-900">
-          Users
-        </h1>
+        <div>
 
-        <p className="mt-3 text-lg text-slate-500">
-          Manage platform users
-        </p>
+          <h1 className="text-5xl font-black text-slate-900">
+            Users
+          </h1>
+
+          <p className="mt-3 text-lg text-slate-500">
+            Manage registered platform users
+          </p>
+
+        </div>
+
+        {/* TOTAL */}
+        <div className="rounded-[30px] bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-6 text-white shadow-xl">
+
+          <p className="text-sm font-medium text-green-100">
+            Total Users
+          </p>
+
+          <h2 className="mt-2 text-4xl font-black">
+
+            {users.length}
+
+          </h2>
+
+        </div>
 
       </div>
 
-      {/* EMPTY */}
+      {/* =========================
+         EMPTY
+      ========================= */}
       {users.length === 0 && (
 
-        <div className="rounded-[32px] bg-white p-20 text-center shadow-sm">
+        <div className="rounded-[36px] bg-white p-20 text-center shadow-sm">
 
           <User
             size={60}
@@ -176,7 +199,9 @@ export default function AdminUsers() {
         </div>
       )}
 
-      {/* GRID */}
+      {/* =========================
+         USERS GRID
+      ========================= */}
       {users.length > 0 && (
 
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
@@ -185,25 +210,45 @@ export default function AdminUsers() {
 
             <div
               key={user.id}
-              className="overflow-hidden rounded-[36px] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="group overflow-hidden rounded-[36px] border border-slate-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
 
-              {/* HEADER */}
-              <div className="bg-gradient-to-r from-green-600 to-emerald-700 p-8 text-white">
+              {/* TOP */}
+              <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-green-700 p-8 text-white">
 
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 backdrop-blur">
+                <div className="absolute right-[-40px] top-[-40px] h-40 w-40 rounded-full bg-white/10 blur-3xl" />
 
-                  <User size={36} />
+                <div className="relative z-10">
+
+                  {/* AVATAR */}
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 backdrop-blur">
+
+                    <User size={38} />
+
+                  </div>
+
+                  {/* NAME */}
+                  <h2 className="mt-6 text-3xl font-black leading-tight">
+
+                    {user.full_name ||
+                      user.name ||
+                      "Unknown User"}
+
+                  </h2>
+
+                  {/* ROLE */}
+                  <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur">
+
+                    <ShieldCheck size={16} />
+
+                    {user.role === "admin" ||
+                    user.is_admin
+                      ? "Administrator"
+                      : "Customer"}
+
+                  </div>
 
                 </div>
-
-                <h2 className="mt-6 text-3xl font-black">
-
-                  {user.full_name ||
-                    user.name ||
-                    "Unknown User"}
-
-                </h2>
 
               </div>
 
@@ -211,70 +256,113 @@ export default function AdminUsers() {
               <div className="space-y-5 p-8">
 
                 {/* EMAIL */}
-                <div className="flex items-center gap-3 text-slate-700">
+                <div className="flex items-start gap-4 rounded-2xl bg-slate-50 p-4">
 
                   <Mail
-                    size={18}
-                    className="text-green-600"
+                    size={20}
+                    className="mt-1 text-green-600"
                   />
 
-                  <span className="font-medium">
+                  <div>
 
-                    {user.email}
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                      Email
+                    </p>
 
-                  </span>
+                    <p className="mt-1 font-semibold text-slate-700 break-all">
+
+                      {user.email}
+
+                    </p>
+
+                  </div>
 
                 </div>
 
                 {/* PHONE */}
-                <div className="flex items-center gap-3 text-slate-700">
+                <div className="flex items-start gap-4 rounded-2xl bg-slate-50 p-4">
 
                   <Phone
-                    size={18}
+                    size={20}
+                    className="mt-1 text-green-600"
+                  />
+
+                  <div>
+
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                      Phone Number
+                    </p>
+
+                    <p className="mt-1 font-semibold text-slate-700">
+
+                      {user.phone ||
+                        "No phone number"}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {/* ADDRESS */}
+                <div className="flex items-start gap-4 rounded-2xl bg-slate-50 p-4">
+
+                  <MapPin
+                    size={20}
+                    className="mt-1 text-green-600"
+                  />
+
+                  <div>
+
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                      Address
+                    </p>
+
+                    <p className="mt-1 font-semibold text-slate-700">
+
+                      {user.address ||
+                        "No address"}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {/* NATIONALITY */}
+                <div className="flex items-start gap-4 rounded-2xl bg-slate-50 p-4">
+
+                  <Globe
+                    size={20}
+                    className="mt-1 text-green-600"
+                  />
+
+                  <div>
+
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                      Nationality
+                    </p>
+
+                    <p className="mt-1 font-semibold text-slate-700">
+
+                      {user.nationality ||
+                        "Not specified"}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {/* JOIN DATE */}
+                <div className="flex items-center gap-3 border-t pt-5 text-sm text-slate-500">
+
+                  <CalendarDays
+                    size={16}
                     className="text-green-600"
                   />
 
-                  <span className="font-medium">
-
-                    {user.phone ||
-                      "No phone"}
-
-                  </span>
-
-                </div>
-
-                {/* ROLE */}
-                <div>
-
-                  <span
-                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${
-                      user.role ===
-                        "admin" ||
-                      user.is_admin
-                        ? "bg-purple-100 text-purple-700"
-                        : "bg-blue-100 text-blue-700"
-                    }`}
-                  >
-
-                    <ShieldCheck
-                      size={16}
-                    />
-
-                    {user.role ===
-                      "admin" ||
-                    user.is_admin
-                      ? "Administrator"
-                      : "User"}
-
-                  </span>
-
-                </div>
-
-                {/* DATE */}
-                <p className="pt-4 text-sm text-slate-400">
-
                   Joined:
-                  {" "}
 
                   {user.created_at ||
                   user.createdAt
@@ -284,7 +372,7 @@ export default function AdminUsers() {
                       ).toLocaleDateString()
                     : "N/A"}
 
-                </p>
+                </div>
 
               </div>
 

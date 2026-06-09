@@ -14,6 +14,10 @@ import {
   Clock3,
   CalendarDays,
   Loader2,
+  Plane,
+  Package,
+  TrendingUp,
+  Search,
 } from "lucide-react";
 
 /* =========================
@@ -28,23 +32,31 @@ const API =
 type Payment = {
   id: number;
 
-  customer_name: string;
+  surname: string;
+
+  first_name: string;
 
   email: string;
 
-  booking_type: string;
+  amount: number;
+
+  status: string;
+
+  payment_reference: string;
+
+  created_at: string;
 
   package_title?: string;
 
   ticket_airline?: string;
 
-  amount: number;
+  from_airport?: string;
 
-  payment_status: string;
+  to_airport?: string;
 
-  reference: string;
+  package_id?: number;
 
-  created_at: string;
+  ticket_id?: number;
 };
 
 /* =========================
@@ -57,6 +69,9 @@ export default function AdminPayments() {
 
   const [loading, setLoading] =
     useState(true);
+
+  const [search, setSearch] =
+    useState("");
 
   /* =========================
      FETCH PAYMENTS
@@ -74,7 +89,7 @@ export default function AdminPayments() {
 
       const response =
         await axios.get(
-          `${API}/admin/payments`,
+          `${API}/admin/bookings`,
           {
             headers: {
               Authorization:
@@ -93,7 +108,7 @@ export default function AdminPayments() {
           response.data
         )
           ? response.data
-          : response.data.payments ||
+          : response.data.bookings ||
             response.data.data ||
             [];
 
@@ -119,18 +134,40 @@ export default function AdminPayments() {
   }, []);
 
   /* =========================
+     FILTER
+  ========================= */
+  const filteredPayments =
+    payments.filter((item) => {
+
+      const value = `
+        ${item.surname}
+        ${item.first_name}
+        ${item.email}
+        ${item.package_title}
+        ${item.ticket_airline}
+      `.toLowerCase();
+
+      return value.includes(
+        search.toLowerCase()
+      );
+    });
+
+  /* =========================
      TOTAL
   ========================= */
   const totalRevenue =
-    payments
+    filteredPayments
       .filter(
         (item) =>
-          item.payment_status ===
+          item.status ===
           "paid"
       )
       .reduce(
         (acc, curr) =>
-          acc + Number(curr.amount),
+          acc +
+          Number(
+            curr.amount || 0
+          ),
         0
       );
 
@@ -155,7 +192,7 @@ export default function AdminPayments() {
     <div className="space-y-10">
 
       {/* HEADER */}
-      <div className="flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-center">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
 
         <div>
 
@@ -164,12 +201,12 @@ export default function AdminPayments() {
           </h1>
 
           <p className="mt-3 text-lg text-slate-500">
-            Monitor all payment transactions
+            Monitor all travel payments and transactions
           </p>
 
         </div>
 
-        {/* TOTAL */}
+        {/* REVENUE */}
         <div className="rounded-[32px] bg-gradient-to-br from-green-600 to-emerald-700 px-8 py-6 text-white shadow-xl">
 
           <p className="text-sm font-medium text-green-100">
@@ -183,14 +220,41 @@ export default function AdminPayments() {
 
           </h2>
 
+          <div className="mt-3 flex items-center gap-2 text-sm text-green-100">
+
+            <TrendingUp size={16} />
+
+            Live Revenue Data
+
+          </div>
+
         </div>
 
       </div>
 
-      {/* EMPTY */}
-      {payments.length === 0 && (
+      {/* SEARCH */}
+      <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-5 shadow-sm">
 
-        <div className="rounded-[32px] bg-white p-20 text-center shadow-sm">
+        <Search className="text-green-600" />
+
+        <input
+          type="text"
+          value={search}
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+          placeholder="Search payments..."
+          className="w-full bg-transparent text-lg outline-none"
+        />
+
+      </div>
+
+      {/* EMPTY */}
+      {filteredPayments.length === 0 && (
+
+        <div className="rounded-[36px] bg-white p-20 text-center shadow-sm">
 
           <Wallet
             size={60}
@@ -208,53 +272,219 @@ export default function AdminPayments() {
         </div>
       )}
 
-      {/* TABLE */}
-      {payments.length > 0 && (
+      {/* MOBILE CARDS */}
+      <div className="grid gap-6 lg:hidden">
 
-        <div className="overflow-x-auto rounded-[32px] bg-white p-8 shadow-sm">
+        {filteredPayments.map(
+          (payment) => {
 
-          <table className="w-full min-w-[1200px]">
+          const isTicket =
+            !!payment.ticket_id;
 
-            <thead>
+          return (
 
-              <tr className="border-b">
+            <div
+              key={payment.id}
+              className="rounded-[32px] bg-white p-6 shadow-sm"
+            >
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Customer
-                </th>
+              {/* TOP */}
+              <div className="flex items-start justify-between gap-4">
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Type
-                </th>
+                <div>
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Travel Info
-                </th>
+                  <h3 className="font-black text-slate-900">
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Amount
-                </th>
+                    {payment.surname}
+                    {" "}
+                    {payment.first_name}
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Status
-                </th>
+                  </h3>
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500">
+
+                    {payment.email}
+
+                  </p>
+
+                </div>
+
+                {/* STATUS */}
+                <span
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold ${
+                    payment.status ===
+                    "paid"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+
+                  {payment.status ===
+                  "paid" ? (
+
+                    <CheckCircle2
+                      size={12}
+                    />
+
+                  ) : (
+
+                    <Clock3
+                      size={12}
+                    />
+                  )}
+
+                  {payment.status}
+
+                </span>
+
+              </div>
+
+              {/* TYPE */}
+              <div className="mt-6">
+
+                {isTicket ? (
+
+                  <div className="flex items-center gap-3">
+
+                    <Plane className="text-green-600" />
+
+                    <div>
+
+                      <p className="font-semibold text-slate-900">
+
+                        {payment.ticket_airline}
+
+                      </p>
+
+                      <p className="text-sm text-slate-500">
+
+                        {payment.from_airport}
+                        {" → "}
+                        {payment.to_airport}
+
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                ) : (
+
+                  <div className="flex items-center gap-3">
+
+                    <Package className="text-blue-600" />
+
+                    <p className="font-semibold text-slate-900">
+
+                      {payment.package_title}
+
+                    </p>
+
+                  </div>
+                )}
+
+              </div>
+
+              {/* AMOUNT */}
+              <div className="mt-6 flex items-center gap-3 text-green-600">
+
+                <CreditCard size={18} />
+
+                <span className="text-3xl font-black">
+
+                  ₦
+                  {Number(
+                    payment.amount || 0
+                  ).toLocaleString()}
+
+                </span>
+
+              </div>
+
+              {/* REFERENCE */}
+              <div className="mt-6 rounded-2xl bg-slate-50 p-4">
+
+                <p className="text-sm text-slate-500">
                   Reference
-                </th>
+                </p>
 
-                <th className="pb-5 text-left text-sm font-bold text-slate-500">
-                  Date
-                </th>
+                <p className="mt-2 font-bold text-slate-900">
 
-              </tr>
+                  {payment.payment_reference}
 
-            </thead>
+                </p>
 
-            <tbody>
+              </div>
 
-              {payments.map(
-                (payment) => (
+              {/* DATE */}
+              <div className="mt-6 flex items-center gap-3 text-slate-500">
+
+                <CalendarDays size={16} />
+
+                {payment.created_at
+                  ? new Date(
+                      payment.created_at
+                    ).toLocaleDateString()
+                  : "N/A"}
+
+              </div>
+
+            </div>
+          );
+        })}
+
+      </div>
+
+      {/* DESKTOP TABLE */}
+      <div className="hidden overflow-x-auto rounded-[36px] bg-white p-8 shadow-sm lg:block">
+
+        <table className="w-full min-w-[1200px]">
+
+          <thead>
+
+            <tr className="border-b">
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Customer
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Type
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Travel Info
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Amount
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Status
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Reference
+              </th>
+
+              <th className="pb-5 text-left text-sm font-bold text-slate-500">
+                Date
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {filteredPayments.map(
+              (payment) => {
+
+              const isTicket =
+                !!payment.ticket_id;
+
+              return (
 
                 <tr
                   key={payment.id}
@@ -268,7 +498,9 @@ export default function AdminPayments() {
 
                       <h3 className="font-bold text-slate-900">
 
-                        {payment.customer_name}
+                        {payment.surname}
+                        {" "}
+                        {payment.first_name}
 
                       </h3>
 
@@ -285,37 +517,53 @@ export default function AdminPayments() {
                   {/* TYPE */}
                   <td className="py-6">
 
-                    <span
-                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold ${
-                        payment.booking_type ===
-                        "ticket"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
-                    >
+                    {isTicket ? (
 
-                      {payment.booking_type}
+                      <span className="rounded-full bg-green-100 px-4 py-2 text-xs font-bold text-green-700">
 
-                    </span>
+                        Ticket
+
+                      </span>
+
+                    ) : (
+
+                      <span className="rounded-full bg-blue-100 px-4 py-2 text-xs font-bold text-blue-700">
+
+                        Package
+
+                      </span>
+                    )}
 
                   </td>
 
                   {/* INFO */}
                   <td className="py-6">
 
-                    {payment.package_title ? (
+                    {isTicket ? (
 
-                      <p className="font-semibold text-slate-900">
+                      <div>
 
-                        {payment.package_title}
+                        <p className="font-semibold text-slate-900">
 
-                      </p>
+                          {payment.ticket_airline}
+
+                        </p>
+
+                        <p className="mt-1 text-sm text-slate-500">
+
+                          {payment.from_airport}
+                          {" → "}
+                          {payment.to_airport}
+
+                        </p>
+
+                      </div>
 
                     ) : (
 
                       <p className="font-semibold text-slate-900">
 
-                        {payment.ticket_airline}
+                        {payment.package_title}
 
                       </p>
                     )}
@@ -345,30 +593,28 @@ export default function AdminPayments() {
 
                     <span
                       className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold ${
-                        payment.payment_status ===
+                        payment.status ===
                         "paid"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
                       }`}
                     >
 
-                      {payment.payment_status ===
+                      {payment.status ===
                       "paid" ? (
 
                         <CheckCircle2
-                          size={14}
+                          size={12}
                         />
 
                       ) : (
 
                         <Clock3
-                          size={14}
+                          size={12}
                         />
                       )}
 
-                      {
-                        payment.payment_status
-                      }
+                      {payment.status}
 
                     </span>
 
@@ -377,7 +623,7 @@ export default function AdminPayments() {
                   {/* REFERENCE */}
                   <td className="py-6 text-sm font-medium text-slate-600">
 
-                    {payment.reference}
+                    {payment.payment_reference}
 
                   </td>
 
@@ -401,14 +647,14 @@ export default function AdminPayments() {
                   </td>
 
                 </tr>
-              ))}
+              );
+            })}
 
-            </tbody>
+          </tbody>
 
-          </table>
+        </table>
 
-        </div>
-      )}
+      </div>
 
     </div>
   );

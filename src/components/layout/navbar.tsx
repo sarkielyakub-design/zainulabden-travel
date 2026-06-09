@@ -1,5 +1,7 @@
 "use client";
 
+
+import "@/src/i18n";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,7 +11,7 @@ import {
   User,
   LogOut,
   LayoutDashboard,
-  Plane,
+  Globe,
 } from "lucide-react";
 
 import {
@@ -24,34 +26,28 @@ import {
 
 import { Button } from "@/src/components/ui/button";
 
+import {
+  useTranslation,
+} from "react-i18next";
+
 const navLinks = [
   {
-    name: "Home",
+    key: "home",
     href: "/",
   },
 
   {
-    name: "Packages",
+    key: "packages",
     href: "/packages",
   },
 
   {
-    name: "Tickets",
+    key: "tickets",
     href: "/tickets",
   },
 
   {
-    name: "Visa Services",
-    href: "/visa-services",
-  },
-
-  {
-    name: "About",
-    href: "/about",
-  },
-
-  {
-    name: "Contact",
+    key: "contact",
     href: "/contact",
   },
 ];
@@ -60,7 +56,11 @@ export default function Navbar() {
 
   const router = useRouter();
 
-  const pathname = usePathname();
+  const pathname =
+    usePathname();
+
+  const { t, i18n } =
+    useTranslation();
 
   const [open, setOpen] =
     useState(false);
@@ -69,7 +69,7 @@ export default function Navbar() {
     useState<any>(null);
 
   /* =========================
-     LOAD USER
+     LOAD USER + LANGUAGE
   ========================= */
   useEffect(() => {
 
@@ -85,7 +85,34 @@ export default function Navbar() {
       );
     }
 
+    const savedLang =
+      localStorage.getItem(
+        "lang"
+      );
+
+    if (savedLang) {
+
+      i18n.changeLanguage(
+        savedLang
+      );
+    }
+
   }, []);
+
+  /* =========================
+     CHANGE LANGUAGE
+  ========================= */
+  function changeLanguage(
+    lang: string
+  ) {
+
+    i18n.changeLanguage(lang);
+
+    localStorage.setItem(
+      "lang",
+      lang
+    );
+  }
 
   /* =========================
      LOGOUT
@@ -110,29 +137,24 @@ export default function Navbar() {
 
       <div className="container-custom flex h-20 items-center justify-between">
 
-        {/* =========================
-           LOGO
-        ========================= */}
+        {/* LOGO */}
         <Link
           href="/"
           className="flex items-center gap-4"
         >
 
-          {/* LOGO IMAGE */}
           <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-green-100 bg-green-50 shadow-sm">
 
             <Image
               src="/logo.png"
-              alt="Zain Logo"
+              alt="Logo"
               width={44}
               height={44}
-              priority
               className="object-contain"
             />
 
           </div>
 
-          {/* TEXT */}
           <div className="hidden sm:block">
 
             <h2 className="text-xl font-black tracking-tight text-slate-900">
@@ -151,44 +173,75 @@ export default function Navbar() {
 
         </Link>
 
-        {/* =========================
-           DESKTOP NAV
-        ========================= */}
+        {/* DESKTOP NAV */}
         <nav className="hidden items-center gap-2 lg:flex">
 
           {navLinks.map((link) => (
 
             <Link
-              key={link.name}
+              key={link.key}
               href={link.href}
               className={`rounded-2xl px-5 py-3 text-sm font-semibold transition ${
                 pathname ===
                 link.href
-                  ? "bg-green-600 text-white shadow-lg shadow-green-500/20"
+                  ? "bg-green-600 text-white"
                   : "text-slate-700 hover:bg-slate-100"
               }`}
             >
 
-              {link.name}
+              {t(link.key)}
 
             </Link>
           ))}
 
         </nav>
 
-        {/* =========================
-           RIGHT SIDE
-        ========================= */}
+        {/* RIGHT */}
         <div className="hidden items-center gap-3 lg:flex">
+
+          {/* LANGUAGE */}
+          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+
+            <Globe
+              size={18}
+              className="text-green-600"
+            />
+
+            <select
+              onChange={(e) =>
+                changeLanguage(
+                  e.target.value
+                )
+              }
+              defaultValue={
+                i18n.language
+              }
+              className="bg-transparent text-sm font-semibold outline-none"
+            >
+
+              <option value="en">
+                EN
+              </option>
+
+              <option value="ar">
+                AR
+              </option>
+
+              <option value="ha">
+                HA
+              </option>
+
+            </select>
+
+          </div>
 
           {!user ? (
             <>
-              {/* LOGIN */}
               <Link href="/login">
 
                 <Button
                   variant="outline"
-                  className="h-12 rounded-2xl border-green-600 px-6 font-bold text-green-700 hover:bg-green-50"
+                  className="h-12 rounded-2xl border-green-600 px-6 font-bold text-green-700"
                 >
 
                   Login
@@ -197,10 +250,9 @@ export default function Navbar() {
 
               </Link>
 
-              {/* REGISTER */}
               <Link href="/register">
 
-                <Button className="h-12 rounded-2xl bg-green-600 px-6 font-bold shadow-lg shadow-green-500/20 hover:bg-green-700">
+                <Button className="h-12 rounded-2xl bg-green-600 px-6 font-bold hover:bg-green-700">
 
                   Register
 
@@ -211,7 +263,7 @@ export default function Navbar() {
           ) : (
             <>
               {/* USER */}
-              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
 
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600">
 
@@ -246,7 +298,7 @@ export default function Navbar() {
                       size={18}
                     />
 
-                    Dashboard
+                    {t("dashboard")}
 
                   </Button>
 
@@ -257,7 +309,7 @@ export default function Navbar() {
               <Button
                 onClick={logout}
                 variant="outline"
-                className="flex h-12 items-center gap-2 rounded-2xl border-red-500 px-6 font-bold text-red-600 hover:bg-red-50"
+                className="flex h-12 items-center gap-2 rounded-2xl border-red-500 px-6 font-bold text-red-600"
               >
 
                 <LogOut size={18} />
@@ -270,14 +322,12 @@ export default function Navbar() {
 
         </div>
 
-        {/* =========================
-           MOBILE MENU BUTTON
-        ========================= */}
+        {/* MOBILE BUTTON */}
         <button
           onClick={() =>
             setOpen(!open)
           }
-          className="rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 lg:hidden"
+          className="rounded-2xl border border-slate-200 p-3 lg:hidden"
         >
 
           {open ? (
@@ -290,20 +340,54 @@ export default function Navbar() {
 
       </div>
 
-      {/* =========================
-         MOBILE MENU
-      ========================= */}
+      {/* MOBILE MENU */}
       {open && (
 
         <div className="border-t bg-white lg:hidden">
 
           <div className="container-custom flex flex-col gap-4 py-6">
 
+            {/* LANGUAGE */}
+            <div className="mb-4 flex items-center gap-3 rounded-2xl border border-slate-200 p-4">
+
+              <Globe
+                size={18}
+                className="text-green-600"
+              />
+
+              <select
+                onChange={(e) =>
+                  changeLanguage(
+                    e.target.value
+                  )
+                }
+                defaultValue={
+                  i18n.language
+                }
+                className="bg-transparent font-semibold outline-none"
+              >
+
+                <option value="en">
+                  English
+                </option>
+
+                <option value="ar">
+                  العربية
+                </option>
+
+                <option value="ha">
+                  Hausa
+                </option>
+
+              </select>
+
+            </div>
+
             {/* LINKS */}
             {navLinks.map((link) => (
 
               <Link
-                key={link.name}
+                key={link.key}
                 href={link.href}
                 onClick={() =>
                   setOpen(false)
@@ -316,119 +400,10 @@ export default function Navbar() {
                 }`}
               >
 
-                {link.name}
+                {t(link.key)}
 
               </Link>
             ))}
-
-            {/* AUTH */}
-            <div className="mt-4 flex flex-col gap-4">
-
-              {!user ? (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() =>
-                      setOpen(false)
-                    }
-                  >
-
-                    <Button
-                      variant="outline"
-                      className="h-14 w-full rounded-2xl border-green-600 font-bold text-green-700"
-                    >
-
-                      Login
-
-                    </Button>
-
-                  </Link>
-
-                  <Link
-                    href="/register"
-                    onClick={() =>
-                      setOpen(false)
-                    }
-                  >
-
-                    <Button className="h-14 w-full rounded-2xl bg-green-600 font-bold hover:bg-green-700">
-
-                      Register
-
-                    </Button>
-
-                  </Link>
-                </>
-              ) : (
-                <>
-                  {/* USER CARD */}
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-
-                    <div className="flex items-center gap-4">
-
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
-
-                        <User size={20} />
-
-                      </div>
-
-                      <div>
-
-                        <p className="text-sm text-slate-500">
-                          Logged In
-                        </p>
-
-                        <h3 className="font-bold text-slate-900">
-
-                          {user.email}
-
-                        </h3>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  {/* ADMIN */}
-                  {user.is_admin && (
-
-                    <Link
-                      href="/admin"
-                      onClick={() =>
-                        setOpen(false)
-                      }
-                    >
-
-                      <Button className="flex h-14 w-full items-center gap-2 rounded-2xl bg-black font-bold text-white">
-
-                        <LayoutDashboard
-                          size={18}
-                        />
-
-                        Admin Dashboard
-
-                      </Button>
-
-                    </Link>
-                  )}
-
-                  {/* LOGOUT */}
-                  <Button
-                    onClick={logout}
-                    variant="outline"
-                    className="flex h-14 w-full items-center gap-2 rounded-2xl border-red-500 font-bold text-red-600"
-                  >
-
-                    <LogOut size={18} />
-
-                    Logout
-
-                  </Button>
-                </>
-              )}
-
-            </div>
 
           </div>
 

@@ -5,6 +5,8 @@ import {
   useState,
 } from "react";
 
+import axios from "axios";
+
 import {
   CalendarDays,
   User,
@@ -14,9 +16,9 @@ import {
   Package,
   Loader2,
   Clock3,
+  Phone,
+  Mail,
 } from "lucide-react";
-
-import axios from "axios";
 
 /* =========================
    API
@@ -81,9 +83,16 @@ export default function AdminBookings() {
       setLoading(true);
 
       const token =
-        localStorage.getItem(
-          "token"
-        );
+        typeof window !== "undefined"
+          ? localStorage.getItem(
+              "token"
+            )
+          : null;
+
+      if (!token) {
+        alert("Unauthorized");
+        return;
+      }
 
       const response =
         await axios.get(
@@ -101,29 +110,31 @@ export default function AdminBookings() {
         response.data
       );
 
-      const bookingsData =
-        Array.isArray(
-          response.data
-        )
-          ? response.data
-          : response.data.bookings ||
-            response.data.data ||
-            [];
+      setBookings(
+        response.data?.data || []
+      );
 
-      setBookings(bookingsData);
-
-    } catch (err) {
+    } catch (err: any) {
 
       console.log(
         "BOOKING ERROR:",
         err
       );
 
+      if (
+        err.response?.status === 401
+      ) {
+        alert(
+          "Session expired. Login again."
+        );
+      }
+
       setBookings([]);
 
     } finally {
 
       setLoading(false);
+
     }
   }
 
@@ -166,19 +177,36 @@ export default function AdminBookings() {
 
       fetchBookings();
 
-    } catch (err) {
+    } catch (err: any) {
 
       console.log(err);
 
       alert(
-        "Payment update failed"
+        err.response?.data?.detail ||
+          "Payment update failed"
       );
 
     } finally {
 
       setMarkingPaid(null);
+
     }
   }
+
+  /* =========================
+     TOTAL REVENUE
+  ========================= */
+  const totalRevenue =
+    bookings
+      .filter(
+        (item) =>
+          item.status === "paid"
+      )
+      .reduce(
+        (acc, curr) =>
+          acc + Number(curr.amount),
+        0
+      );
 
   /* =========================
      LOADING
@@ -186,10 +214,10 @@ export default function AdminBookings() {
   if (loading) {
 
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
 
         <Loader2
-          size={40}
+          size={45}
           className="animate-spin text-green-600"
         />
 
@@ -198,32 +226,52 @@ export default function AdminBookings() {
   }
 
   return (
-    <div className="space-y-10">
+    <main className="min-h-screen bg-slate-50 p-4 lg:p-8">
 
-      {/* HEADER */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      {/* =========================
+          HEADER
+      ========================= */}
+      <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
         <div>
 
           <h1 className="text-4xl font-black text-slate-900 lg:text-5xl">
-            Bookings
+            Booking Management
           </h1>
 
           <p className="mt-3 text-lg text-slate-500">
-            Manage package and ticket reservations
+            Manage all package and ticket reservations
           </p>
+
+        </div>
+
+        {/* REVENUE CARD */}
+        <div className="rounded-[32px] bg-gradient-to-br from-green-600 to-emerald-700 px-8 py-6 text-white shadow-xl">
+
+          <p className="text-sm font-medium text-green-100">
+            Total Revenue
+          </p>
+
+          <h2 className="mt-2 text-4xl font-black">
+
+            ₦
+            {totalRevenue.toLocaleString()}
+
+          </h2>
 
         </div>
 
       </div>
 
-      {/* EMPTY */}
+      {/* =========================
+          EMPTY STATE
+      ========================= */}
       {bookings.length === 0 && (
 
         <div className="rounded-[36px] bg-white p-20 text-center shadow-sm">
 
           <Package
-            size={60}
+            size={70}
             className="mx-auto text-slate-300"
           />
 
@@ -238,13 +286,12 @@ export default function AdminBookings() {
         </div>
       )}
 
-      {/* MOBILE CARDS */}
+      {/* =========================
+          MOBILE CARDS
+      ========================= */}
       <div className="grid gap-6 lg:hidden">
 
         {bookings.map((booking) => {
-
-          const isTicket =
-            !!booking.ticket_id;
 
           const isPackage =
             !!booking.package_id;
@@ -256,7 +303,7 @@ export default function AdminBookings() {
               className="rounded-[32px] bg-white p-6 shadow-sm"
             >
 
-              {/* TOP */}
+              {/* CUSTOMER */}
               <div className="flex items-start justify-between gap-4">
 
                 <div className="flex items-center gap-4">
@@ -277,38 +324,49 @@ export default function AdminBookings() {
 
                     </h3>
 
-                    <p className="mt-1 text-sm text-slate-500">
+                    <div className="mt-2 space-y-1">
 
-                      {booking.email}
+                      <div className="flex items-center gap-2 text-sm text-slate-500">
 
-                    </p>
+                        <Mail size={14} />
+
+                        {booking.email}
+
+                      </div>
+
+                      <div className="flex items-center gap-2 text-sm text-slate-500">
+
+                        <Phone size={14} />
+
+                        {booking.phone}
+
+                      </div>
+
+                    </div>
 
                   </div>
 
                 </div>
 
                 {/* TYPE */}
-                {isPackage ? (
+                <span
+                  className={`rounded-full px-4 py-2 text-xs font-bold ${
+                    isPackage
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-green-100 text-green-700"
+                  }`}
+                >
 
-                  <span className="rounded-full bg-blue-100 px-4 py-2 text-xs font-bold text-blue-700">
+                  {isPackage
+                    ? "Package"
+                    : "Ticket"}
 
-                    Package
-
-                  </span>
-
-                ) : (
-
-                  <span className="rounded-full bg-green-100 px-4 py-2 text-xs font-bold text-green-700">
-
-                    Ticket
-
-                  </span>
-                )}
+                </span>
 
               </div>
 
               {/* INFO */}
-              <div className="mt-6">
+              <div className="mt-6 rounded-2xl bg-slate-50 p-5">
 
                 {isPackage ? (
 
@@ -319,7 +377,7 @@ export default function AdminBookings() {
                       className="text-blue-600"
                     />
 
-                    <span className="font-semibold">
+                    <span className="font-semibold text-slate-900">
 
                       {booking.package_title}
 
@@ -338,7 +396,7 @@ export default function AdminBookings() {
                         className="text-green-600"
                       />
 
-                      <span className="font-semibold">
+                      <span className="font-semibold text-slate-900">
 
                         {booking.ticket_airline}
 
@@ -364,7 +422,7 @@ export default function AdminBookings() {
 
                 <CreditCard size={18} />
 
-                <span className="text-2xl font-black">
+                <span className="text-3xl font-black">
 
                   ₦
                   {Number(
@@ -375,9 +433,10 @@ export default function AdminBookings() {
 
               </div>
 
-              {/* STATUS */}
+              {/* FOOTER */}
               <div className="mt-6 flex items-center justify-between">
 
+                {/* STATUS */}
                 <span
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold ${
                     booking.status ===
@@ -405,10 +464,11 @@ export default function AdminBookings() {
 
                 </span>
 
+                {/* DATE */}
                 <div className="flex items-center gap-2 text-sm text-slate-500">
 
                   <CalendarDays
-                    size={16}
+                    size={15}
                   />
 
                   {booking.created_at
@@ -470,7 +530,9 @@ export default function AdminBookings() {
 
       </div>
 
-      {/* DESKTOP TABLE */}
+      {/* =========================
+          DESKTOP TABLE
+      ========================= */}
       <div className="hidden overflow-x-auto rounded-[36px] bg-white p-8 shadow-sm lg:block">
 
         <table className="w-full min-w-[1200px]">
@@ -513,11 +575,7 @@ export default function AdminBookings() {
 
           <tbody>
 
-            {bookings.map(
-              (booking) => {
-
-              const isTicket =
-                !!booking.ticket_id;
+            {bookings.map((booking) => {
 
               const isPackage =
                 !!booking.package_id;
@@ -556,6 +614,12 @@ export default function AdminBookings() {
 
                         </p>
 
+                        <p className="mt-1 text-sm text-slate-400">
+
+                          {booking.phone}
+
+                        </p>
+
                       </div>
 
                     </div>
@@ -565,22 +629,19 @@ export default function AdminBookings() {
                   {/* TYPE */}
                   <td className="py-6">
 
-                    {isPackage ? (
+                    <span
+                      className={`rounded-full px-4 py-2 text-xs font-bold ${
+                        isPackage
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
 
-                      <span className="rounded-full bg-blue-100 px-4 py-2 text-xs font-bold text-blue-700">
+                      {isPackage
+                        ? "Package"
+                        : "Ticket"}
 
-                        Package
-
-                      </span>
-
-                    ) : (
-
-                      <span className="rounded-full bg-green-100 px-4 py-2 text-xs font-bold text-green-700">
-
-                        Ticket
-
-                      </span>
-                    )}
+                    </span>
 
                   </td>
 
@@ -744,6 +805,6 @@ export default function AdminBookings() {
 
       </div>
 
-    </div>
+    </main>
   );
 }
