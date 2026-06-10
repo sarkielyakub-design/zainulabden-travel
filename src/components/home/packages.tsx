@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -12,14 +12,16 @@ import {
   Star,
   Globe2,
   Users,
-  Clock,
   Crown,
+  Filter,
+  X,
 } from "lucide-react";
 import { getPackages } from "@/src/services/package-service";
 
 export default function PackagesPage() {
   const [packages, setPackages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
 
   useEffect(() => {
     async function fetchPackages() {
@@ -35,17 +37,44 @@ export default function PackagesPage() {
     fetchPackages();
   }, []);
 
+  // Extract unique categories from packages
+  const categories = useMemo(() => {
+    const cats = packages.map((pkg) => pkg.category).filter(Boolean);
+    return ["All", ...Array.from(new Set(cats))];
+  }, [packages]);
+
+  const filteredPackages = useMemo(() => {
+    if (activeCategory === "All") return packages;
+    return packages.filter((pkg) => pkg.category === activeCategory);
+  }, [packages, activeCategory]);
+
+  // Helper for safe number formatting
+  const safeNumber = (value: any, defaultValue = 0) => {
+    const num = Number(value);
+    return isNaN(num) ? defaultValue : num;
+  };
+
   return (
     <main className="min-h-screen bg-[#fef7e8]">
       {/* =========================
-         VINTAGE HERO SECTION
+         VINTAGE HERO SECTION – FIXED
       ========================= */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#2e241f] via-[#3a2c24] to-[#1c1814] py-28 text-[#ece2d4]">
-        {/* Antique pattern overlay */}
-        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"%3E%3Cpath fill="%23d9a13b" d="M40 0L50 12L40 24L30 12L40 0zM0 40L12 30L24 40L12 50L0 40zM80 40L68 30L56 40L68 50L80 40zM40 80L50 68L40 56L30 68L40 80z"/%3E%3C/svg%3E')] bg-repeat" />
+        {/* Fixed pattern overlay – no quote errors */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'%3E%3Cpath fill='%23d9a13b' d='M40 0L50 12L40 24L30 12L40 0zM0 40L12 30L24 40L12 50L0 40zM80 40L68 30L56 40L68 50L80 40zM40 80L50 68L40 56L30 68L40 80z'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "repeat",
+          }}
+        />
         
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/70" />
-        <div className="absolute inset-0 bg-[url('/images/vintage-paper-texture.png')] opacity-20 mix-blend-multiply" />
+        
+        {/* Optional texture – safe fallback */}
+        <div className="absolute inset-0 opacity-20 mix-blend-multiply" 
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E")` }}
+        />
         
         <div className="container-custom relative z-10">
           <div className="max-w-5xl">
@@ -69,14 +98,19 @@ export default function PackagesPage() {
               modern comfort, and impeccable service. Each package tells a story.
             </p>
 
-            {/* Vintage filter chips */}
+            {/* Vintage filter chips with active state */}
             <div className="mt-12 flex flex-wrap gap-3">
-              {["Umrah", "Hajj", "Dubai", "Turkey", "London", "VIP Collection"].map((item) => (
+              {categories.map((category) => (
                 <button
-                  key={item}
-                  className="rounded-full border border-[#d9a13b]/40 bg-[#2e241f]/60 px-6 py-2.5 font-serif text-sm font-semibold tracking-wide text-[#ece2d4] backdrop-blur transition-all hover:border-[#d9a13b] hover:bg-[#d9a13b] hover:text-[#1c1814]"
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`rounded-full border px-6 py-2.5 font-serif text-sm font-semibold tracking-wide backdrop-blur transition-all ${
+                    activeCategory === category
+                      ? "border-[#d9a13b] bg-[#d9a13b] text-[#1c1814] shadow-lg"
+                      : "border-[#d9a13b]/40 bg-[#2e241f]/60 text-[#ece2d4] hover:border-[#d9a13b] hover:bg-[#d9a13b] hover:text-[#1c1814]"
+                  }`}
                 >
-                  {item}
+                  {category}
                 </button>
               ))}
             </div>
@@ -104,6 +138,7 @@ export default function PackagesPage() {
             </p>
           </div>
 
+          {/* Loading */}
           {loading && (
             <div className="flex flex-col items-center justify-center py-32">
               <div className="h-16 w-16 animate-spin rounded-full border-4 border-[#e6e4d9] border-t-[#d9a13b]" />
@@ -111,88 +146,102 @@ export default function PackagesPage() {
             </div>
           )}
 
-          {!loading && packages.length === 0 && (
+          {/* No packages */}
+          {!loading && filteredPackages.length === 0 && (
             <div className="rounded-[48px] border border-[#e2d5bd] bg-[#fffbf2] p-20 text-center shadow-xl">
               <h2 className="font-serif text-4xl font-black text-[#2e241f]">No Packages Found</h2>
-              <p className="mt-3 font-sans text-[#8b7355]">Please check back later for new journeys.</p>
+              <p className="mt-3 font-sans text-[#8b7355]">Try a different category or check back later.</p>
+              <button
+                onClick={() => setActiveCategory("All")}
+                className="mt-6 rounded-full bg-[#b8860b] px-6 py-3 font-serif font-bold text-[#fef7e8] transition hover:bg-[#d9a13b]"
+              >
+                View All Packages
+              </button>
             </div>
           )}
 
-          {!loading && packages.length > 0 && (
+          {/* Package grid */}
+          {!loading && filteredPackages.length > 0 && (
             <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-3">
-              {packages.map((item) => {
-                const spotsLeft = item.total_slots - item.booked_slots;
-                const progress = (item.booked_slots / item.total_slots) * 100;
+              {filteredPackages.map((item, idx) => {
+                const totalSlots = safeNumber(item.total_slots, 1);
+                const bookedSlots = safeNumber(item.booked_slots);
+                const spotsLeft = totalSlots - bookedSlots;
+                const progress = (bookedSlots / totalSlots) * 100;
+                const price = safeNumber(item.price);
 
                 return (
                   <div
                     key={item.id}
                     className="group relative overflow-hidden rounded-[32px] bg-[#fffbf2] shadow-[0_20px_40px_-12px_rgba(30,20,10,0.15)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_32px_56px_-16px_rgba(15,23,42,0.25)]"
+                    style={{ animationDelay: `${idx * 50}ms` }}
                   >
                     {/* Vintage border accent */}
                     <div className="absolute inset-0 rounded-[32px] border border-[#e2d5bd] pointer-events-none" />
                     
-                    {/* Image container with antique overlay */}
+                    {/* Image container */}
                     <div className="relative h-[320px] overflow-hidden">
-                      <img
+                      <Image
                         src={item.image_url || "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1600&auto=format&fit=crop"}
-                        alt={item.title}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt={item.title || "Travel package"}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#1c1814]/80 via-[#1c1814]/20 to-transparent" />
                       
-                      {/* Category badge – vintage gold */}
+                      {/* Category badge */}
                       <div className="absolute left-6 top-6 rounded-full bg-[#b8860b] px-5 py-2 text-sm font-serif font-bold tracking-wide text-[#fef7e8] shadow-lg">
-                        {item.category}
+                        {item.category || "Exclusive"}
                       </div>
                       
                       {/* Price medallion */}
                       <div className="absolute bottom-6 right-6 rounded-xl border border-[#d9a13b]/40 bg-[#fffbf2]/90 px-5 py-2.5 backdrop-blur-sm shadow-lg">
                         <p className="font-serif text-xs uppercase tracking-wider text-[#b8860b]">From</p>
-                        <p className="font-serif text-2xl font-black text-[#2e241f]">₦{Number(item.price).toLocaleString()}</p>
+                        <p className="font-serif text-2xl font-black text-[#2e241f]">₦{price.toLocaleString()}</p>
                       </div>
                     </div>
 
                     {/* Content */}
                     <div className="p-7">
-                      <h3 className="font-serif text-3xl font-black leading-tight text-[#2e241f]">{item.title}</h3>
-                      <p className="mt-4 line-clamp-3 font-sans text-base leading-relaxed text-[#5a4a3a]">{item.description}</p>
+                      <h3 className="font-serif text-3xl font-black leading-tight text-[#2e241f]">{item.title || "Untitled Package"}</h3>
+                      <p className="mt-4 line-clamp-3 font-sans text-base leading-relaxed text-[#5a4a3a]">{item.description || "Experience luxury travel with premium services."}</p>
 
-                      {/* Travel details – vintage cards */}
+                      {/* Travel details */}
                       <div className="mt-6 space-y-3">
                         <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
                           <Plane size={20} className="text-[#b8860b]" />
-                          <span className="font-serif font-semibold text-[#2e241f]">{item.flight_name}</span>
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.flight_name || "Premium Airline"}</span>
                         </div>
                         <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
                           <Hotel size={20} className="text-[#b8860b]" />
-                          <span className="font-serif font-semibold text-[#2e241f]">{item.hotel_name}</span>
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.hotel_name || "Luxury Hotel"}</span>
                         </div>
                         <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
                           <CalendarDays size={20} className="text-[#b8860b]" />
-                          <span className="font-serif font-semibold text-[#2e241f]">{item.departure_date}</span>
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.departure_date || "Flexible Dates"}</span>
                         </div>
                       </div>
 
-                      {/* Availability meter – antique style */}
+                      {/* Availability meter */}
                       <div className="mt-8 rounded-2xl border border-[#e2d5bd] bg-gradient-to-br from-[#fef7e8] to-[#fffbf2] p-5">
                         <div className="mb-3 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Users size={20} className="text-[#b8860b]" />
                             <span className="font-serif font-bold text-[#b8860b]">
-                              {spotsLeft} spots left
+                              {spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} left
                             </span>
                           </div>
-                          <span className="font-sans text-sm text-[#8b7355]">{item.booked_slots} booked</span>
+                          <span className="font-sans text-sm text-[#8b7355]">{bookedSlots} booked</span>
                         </div>
                         <div className="h-2 overflow-hidden rounded-full bg-[#e2d5bd]">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-[#d9a13b] to-[#b8860b] transition-all duration-1000"
-                            style={{ width: `${progress}%` }}
+                            style={{ width: `${Math.min(progress, 100)}%` }}
                           />
                         </div>
                         <div className="mt-2 text-right font-sans text-xs text-[#8b7355]">
-                          {item.booked_slots} of {item.total_slots} claimed
+                          {bookedSlots} of {totalSlots} claimed
                         </div>
                       </div>
 
@@ -200,7 +249,7 @@ export default function PackagesPage() {
                       <div className="mt-8 flex items-center justify-between">
                         <div>
                           <p className="font-serif text-xs uppercase tracking-wider text-[#b8860b]">Starting from</p>
-                          <p className="font-serif text-3xl font-black text-[#b8860b]">₦{Number(item.price).toLocaleString()}</p>
+                          <p className="font-serif text-3xl font-black text-[#b8860b]">₦{price.toLocaleString()}</p>
                         </div>
                         <Link
                           href={`/packages/${item.id}`}
