@@ -224,7 +224,7 @@ export default function Hero() {
             {/* Hero Image with floating cards */}
             <div className="relative h-72 md:h-80 overflow-hidden">
               <Image
-                src="/images/kaaba-hero.jpg" // Ensure this image exists in public/images
+                src="/image/kaaba-hero.jpg" // Ensure this image exists in public/images
                 alt="Umrah travel"
                 fill
                 priority
