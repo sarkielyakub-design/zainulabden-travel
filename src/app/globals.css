@@ -26,8 +26,8 @@ body {
 }
 
 /* =========================
-   SAAS THEME VARIABLES
-   Inspired by Booking.com + Airbnb
+   VINTAGE THEME VARIABLES
+   Inspired by old-world travel + heritage elegance
 ========================= */
 @theme inline {
   --font-heading: var(--font-sans);
@@ -79,117 +79,117 @@ body {
 }
 
 /* =========================
-   LIGHT MODE
+   LIGHT MODE (VINTAGE WARMTH)
 ========================= */
 :root {
-  /* BACKGROUND */
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  /* BACKGROUND – aged parchment */
+  --background: #fef7e8;
+  --foreground: #2e241f;
 
-  /* CARD */
-  --card: #ffffff;
-  --card-foreground: #0f172a;
+  /* CARD – creamy paper */
+  --card: #fffbf2;
+  --card-foreground: #2e241f;
 
   /* POPOVER */
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --popover: #fffbf2;
+  --popover-foreground: #2e241f;
 
-  /* PRIMARY */
-  --primary: #16a34a;
-  --primary-foreground: #ffffff;
+  /* PRIMARY – antique gold / brass */
+  --primary: #b8860b;
+  --primary-foreground: #fef7e8;
 
-  /* SECONDARY */
-  --secondary: #eff6ff;
-  --secondary-foreground: #1e293b;
+  /* SECONDARY – dusty sage / vintage green */
+  --secondary: #e6e4d9;
+  --secondary-foreground: #3a2c24;
 
-  /* MUTED */
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  /* MUTED – warm stone */
+  --muted: #efe6d7;
+  --muted-foreground: #6b5a4e;
 
-  /* ACCENT */
-  --accent: #ecfdf5;
-  --accent-foreground: #166534;
+  /* ACCENT – aged terracotta */
+  --accent: #d9bc9a;
+  --accent-foreground: #2e241f;
 
-  /* DANGER */
-  --destructive: #dc2626;
+  /* DANGER – rust red */
+  --destructive: #b45a3b;
 
-  /* BORDER */
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #16a34a;
+  /* BORDER – faded sepia */
+  --border: #e2d5bd;
+  --input: #e2d5bd;
+  --ring: #b8860b;
 
-  /* CHARTS */
-  --chart-1: #16a34a;
-  --chart-2: #2563eb;
-  --chart-3: #f59e0b;
-  --chart-4: #ef4444;
-  --chart-5: #8b5cf6;
+  /* CHARTS – vintage palette */
+  --chart-1: #b8860b;
+  --chart-2: #8a6e4b;
+  --chart-3: #c47e5a;
+  --chart-4: #6c8b6e;
+  --chart-5: #bc9a6c;
 
-  /* RADIUS */
-  --radius: 1rem;
+  /* RADIUS – soft, slightly rounded */
+  --radius: 0.75rem;
 
   /* SIDEBAR */
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
+  --sidebar: #fffbf2;
+  --sidebar-foreground: #2e241f;
 
-  --sidebar-primary: #16a34a;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary: #b8860b;
+  --sidebar-primary-foreground: #fef7e8;
 
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #0f172a;
+  --sidebar-accent: #e6e4d9;
+  --sidebar-accent-foreground: #2e241f;
 
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #16a34a;
+  --sidebar-border: #e2d5bd;
+  --sidebar-ring: #b8860b;
 }
 
 /* =========================
-   DARK MODE
+   DARK MODE (AGED LEATHER & CLOISTER)
 ========================= */
 .dark {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #1c1814;
+  --foreground: #ece2d4;
 
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
+  --card: #26211c;
+  --card-foreground: #ece2d4;
 
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
+  --popover: #26211c;
+  --popover-foreground: #ece2d4;
 
-  --primary: #22c55e;
-  --primary-foreground: #ffffff;
+  --primary: #d9a13b;
+  --primary-foreground: #1c1814;
 
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
+  --secondary: #2f2922;
+  --secondary-foreground: #ece2d4;
 
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
+  --muted: #2f2922;
+  --muted-foreground: #b8aa97;
 
-  --accent: #14532d;
-  --accent-foreground: #dcfce7;
+  --accent: #5e6b4a;
+  --accent-foreground: #ece2d4;
 
-  --destructive: #ef4444;
+  --destructive: #b95c3a;
 
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #22c55e;
+  --border: rgba(210, 185, 150, 0.2);
+  --input: rgba(210, 185, 150, 0.2);
+  --ring: #d9a13b;
 
-  --chart-1: #22c55e;
-  --chart-2: #3b82f6;
-  --chart-3: #f59e0b;
-  --chart-4: #ef4444;
-  --chart-5: #8b5cf6;
+  --chart-1: #d9a13b;
+  --chart-2: #b48c5c;
+  --chart-3: #a76834;
+  --chart-4: #6e8b5e;
+  --chart-5: #d4b483;
 
-  --sidebar: #020617;
-  --sidebar-foreground: #f8fafc;
+  --sidebar: #1c1814;
+  --sidebar-foreground: #ece2d4;
 
-  --sidebar-primary: #22c55e;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary: #d9a13b;
+  --sidebar-primary-foreground: #1c1814;
 
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-accent: #2f2922;
+  --sidebar-accent-foreground: #ece2d4;
 
-  --sidebar-border: rgba(255,255,255,0.08);
-  --sidebar-ring: #22c55e;
+  --sidebar-border: rgba(210, 185, 150, 0.2);
+  --sidebar-ring: #d9a13b;
 }
 
 /* =========================
@@ -225,53 +225,44 @@ body {
 }
 
 /* =========================
-   GLASS EFFECT
+   GLASS EFFECT (VINTAGE FROST)
 ========================= */
 .glass {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(20px);
+  background: rgba(254, 247, 232, 0.75);
+  backdrop-filter: blur(16px);
 }
 
 .dark .glass {
-  background: rgba(15,23,42,0.7);
+  background: rgba(28, 24, 20, 0.8);
+  backdrop-filter: blur(16px);
 }
 
 /* =========================
-   PREMIUM SHADOWS
+   PREMIUM SHADOWS (WARM & SOFT)
 ========================= */
 .shadow-soft {
-  box-shadow:
-    0 10px 30px rgba(15,23,42,0.06);
+  box-shadow: 0 10px 25px -5px rgba(50, 30, 10, 0.08),
+              0 5px 10px -3px rgba(30, 20, 10, 0.04);
 }
 
 .shadow-premium {
-  box-shadow:
-    0 20px 60px rgba(15,23,42,0.12);
+  box-shadow: 0 25px 40px -12px rgba(40, 25, 10, 0.18),
+              0 4px 12px -6px rgba(20, 12, 5, 0.08);
 }
 
 /* =========================
-   PREMIUM GRADIENTS
+   PREMIUM GRADIENTS (VINTAGE)
 ========================= */
 .gradient-primary {
-  background:
-    linear-gradient(
-      135deg,
-      #16a34a 0%,
-      #22c55e 100%
-    );
+  background: linear-gradient(135deg, #d9a13b 0%, #b8860b 100%);
 }
 
 .gradient-dark {
-  background:
-    linear-gradient(
-      135deg,
-      #020617 0%,
-      #0f172a 100%
-    );
+  background: linear-gradient(135deg, #1c1814 0%, #2b241e 100%);
 }
 
 /* =========================
-   SCROLLBAR
+   SCROLLBAR (ANTIQUE BRASS)
 ========================= */
 ::-webkit-scrollbar {
   width: 8px;
@@ -279,10 +270,18 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #16a34a;
+  background: #b8860b;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f3ecd9;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #d9a13b;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #2a241e;
 }
