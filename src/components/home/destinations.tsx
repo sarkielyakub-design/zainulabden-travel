@@ -11,337 +11,196 @@ import {
   Hotel,
   Globe2,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 
 const destinations = [
   {
     title: "Makkah",
-
     slug: "makkah",
-
     image:
       "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1600&auto=format&fit=crop",
-
     packages: "24 Packages",
-
     price: "From ₦1.8M",
-
     rating: "4.9",
-
     hotels: "5 Star Hotels",
-
     flights: "Direct Flights",
-
     description:
       "Premium Umrah & spiritual journeys with VIP transportation and luxury accommodation.",
   },
-
   {
     title: "Dubai",
-
     slug: "dubai",
-
     image:
       "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop",
-
     packages: "18 Packages",
-
     price: "From ₦2.2M",
-
     rating: "4.8",
-
     hotels: "Luxury Resorts",
-
     flights: "Emirates & Qatar",
-
     description:
       "Luxury Dubai tours, desert safari, Burj Khalifa and premium shopping experiences.",
   },
-
   {
     title: "Turkey",
-
     slug: "turkey",
-
     image:
       "https://images.unsplash.com/photo-1527838832700-5059252407fa?q=80&w=1600&auto=format&fit=crop",
-
     packages: "12 Packages",
-
     price: "From ₦2.5M",
-
     rating: "4.7",
-
     hotels: "Boutique Hotels",
-
     flights: "Turkish Airlines",
-
     description:
       "Explore Istanbul, Cappadocia and breathtaking historical destinations in comfort.",
   },
 ];
 
 export default function Destinations() {
-
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-28">
-
-      {/* BACKGROUND */}
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 py-28">
+      {/* Premium background orbs */}
       <div className="absolute inset-0">
-
-        <div className="absolute left-[-120px] top-0 h-[350px] w-[350px] rounded-full bg-green-300/10 blur-3xl" />
-
-        <div className="absolute bottom-[-120px] right-[-120px] h-[420px] w-[420px] rounded-full bg-emerald-300/10 blur-3xl" />
-
+        <div className="absolute left-[-150px] top-[-150px] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-emerald-300/15 via-teal-300/10 to-transparent blur-3xl" />
+        <div className="absolute bottom-[-100px] right-[-100px] h-[500px] w-[500px] rounded-full bg-gradient-to-tl from-blue-300/10 to-emerald-300/15 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-200/5 blur-3xl" />
       </div>
 
       <div className="container-custom relative">
-
-        {/* HEADER */}
+        {/* HEADER – Premium elevated */}
         <div className="mb-20 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-
           <div>
-
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-green-100 px-5 py-2 text-sm font-bold text-green-700">
-
-              <Globe2 size={18} />
-
-              Popular Destinations
-
-            </div>
-
-            <h2 className="max-w-4xl text-5xl font-black leading-tight text-slate-900 lg:text-6xl">
-
-              Explore The World's Most
-              <span className="block text-green-600">
-                Loved Travel Destinations
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-5 py-2.5 shadow-sm backdrop-blur-sm">
+              <Sparkles size={18} className="text-emerald-600" />
+              <span className="text-sm font-bold uppercase tracking-wide text-emerald-700">
+                Exotic Destinations
               </span>
-
+            </div>
+            <h2 className="max-w-4xl text-5xl font-black leading-tight tracking-tight text-slate-900 lg:text-6xl">
+              Explore The World's Most
+              <span className="block bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                Cherished Travel Destinations
+              </span>
             </h2>
-
-            <p className="mt-8 max-w-3xl text-xl leading-9 text-slate-600">
-
-              Discover premium Umrah,
-              luxury tours, flights and
-              unforgettable travel experiences
-              carefully crafted for comfort,
-              spirituality and excellence.
-
+            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
+              Discover premium Umrah, luxury tours, flights, and unforgettable
+              travel experiences – carefully crafted for comfort, spirituality,
+              and excellence.
             </p>
-
           </div>
 
-          {/* CTA */}
           <Link
             href="/packages"
-            className="inline-flex items-center gap-3 rounded-2xl bg-green-600 px-8 py-5 text-lg font-bold text-white shadow-lg shadow-green-500/20 transition hover:bg-green-700"
+            className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-7 py-4 text-base font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:shadow-xl"
           >
-
             View All Packages
-
-            <ArrowRight size={22} />
-
+            <ArrowRight size={18} />
           </Link>
-
         </div>
 
-        {/* GRID */}
-        <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
-
-          {destinations.map((item) => (
-
+        {/* GRID – Premium cards */}
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {destinations.map((item, idx) => (
             <Link
               key={item.title}
               href={`/packages?destination=${item.slug}`}
-              className="group block"
+              className="group block transition-all duration-500 hover:-translate-y-3"
             >
-
-              <div className="overflow-hidden rounded-[40px] bg-white shadow-[0_20px_80px_rgba(15,23,42,0.08)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_100px_rgba(15,23,42,0.16)]">
-
-                {/* IMAGE */}
-                <div className="relative h-[420px] overflow-hidden">
-
+              <div className="overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/50 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-100/50">
+                {/* IMAGE CONTAINER */}
+                <div className="relative h-[380px] overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     unoptimized
-                    className="object-cover transition duration-700 group-hover:scale-110"
+                    className="object-cover transition duration-700 ease-out group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                  {/* TOP BADGES */}
-                  <div className="absolute left-5 top-5 flex items-center gap-3">
-
-                    {/* RATING */}
-                    <div className="rounded-full bg-white/90 px-4 py-2 backdrop-blur">
-
-                      <div className="flex items-center gap-2">
-
-                        <Star
-                          size={16}
-                          className="fill-yellow-400 text-yellow-400"
-                        />
-
-                        <span className="text-sm font-bold text-slate-900">
-
-                          {item.rating}
-
-                        </span>
-
-                      </div>
-
+                  {/* Top badges – premium styling */}
+                  <div className="absolute left-5 top-5 flex gap-2">
+                    <div className="flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 shadow-md backdrop-blur-sm">
+                      <Star size={14} className="fill-amber-400 text-amber-400" />
+                      <span className="text-sm font-bold text-slate-800">
+                        {item.rating}
+                      </span>
                     </div>
-
-                    {/* VERIFIED */}
-                    <div className="rounded-full bg-green-600 px-4 py-2 text-sm font-bold text-white">
-
-                      Verified
-
+                    <div className="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-md">
+                      Premium
                     </div>
-
                   </div>
 
-                  {/* BOTTOM INFO */}
+                  {/* Bottom floating info */}
                   <div className="absolute bottom-6 left-6 right-6">
-
-                    <div className="flex items-center gap-2 text-white">
-
-                      <MapPin size={18} />
-
-                      <span className="font-semibold">
+                    <div className="mb-2 flex items-center gap-1.5 text-white/90">
+                      <MapPin size={16} />
+                      <span className="text-sm font-medium tracking-wide">
                         {item.title}
                       </span>
-
                     </div>
-
-                    <h3 className="mt-3 text-5xl font-black text-white">
-
+                    <h3 className="text-4xl font-black text-white drop-shadow-lg">
                       {item.title}
-
                     </h3>
-
-                    <p className="mt-4 line-clamp-2 text-lg leading-8 text-slate-200">
-
+                    <p className="mt-3 line-clamp-2 text-base leading-relaxed text-white/80">
                       {item.description}
-
                     </p>
-
                   </div>
-
                 </div>
 
-                {/* BODY */}
-                <div className="p-8">
-
-                  {/* FEATURES */}
-                  <div className="grid gap-4 md:grid-cols-2">
-
-                    {/* HOTELS */}
-                    <div className="rounded-2xl bg-slate-50 p-5">
-
-                      <div className="flex items-center gap-2">
-
-                        <Hotel
-                          size={18}
-                          className="text-green-600"
-                        />
-
-                        <span className="font-bold text-slate-900">
-
-                          {item.hotels}
-
-                        </span>
-
-                      </div>
-
+                {/* CARD BODY */}
+                <div className="p-6">
+                  {/* Feature chips */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center gap-2 rounded-xl bg-slate-50 px-4 py-3 transition-colors group-hover:bg-emerald-50">
+                      <Hotel size={18} className="text-emerald-600" />
+                      <span className="text-sm font-semibold text-slate-700">
+                        {item.hotels}
+                      </span>
                     </div>
-
-                    {/* FLIGHTS */}
-                    <div className="rounded-2xl bg-slate-50 p-5">
-
-                      <div className="flex items-center gap-2">
-
-                        <Plane
-                          size={18}
-                          className="text-green-600"
-                        />
-
-                        <span className="font-bold text-slate-900">
-
-                          {item.flights}
-
-                        </span>
-
-                      </div>
-
+                    <div className="flex items-center gap-2 rounded-xl bg-slate-50 px-4 py-3 transition-colors group-hover:bg-emerald-50">
+                      <Plane size={18} className="text-emerald-600" />
+                      <span className="text-sm font-semibold text-slate-700">
+                        {item.flights}
+                      </span>
                     </div>
-
                   </div>
 
-                  {/* FOOTER */}
-                  <div className="mt-8 flex items-center justify-between">
-
+                  {/* Pricing row */}
+                  <div className="mt-6 flex items-center justify-between">
                     <div>
-
-                      <p className="text-sm text-slate-500">
+                      <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
                         Available Packages
                       </p>
-
-                      <h4 className="mt-2 text-2xl font-black text-slate-900">
-
+                      <p className="text-xl font-black text-slate-800">
                         {item.packages}
-
-                      </h4>
-
+                      </p>
                     </div>
-
                     <div className="text-right">
-
-                      <p className="text-sm text-slate-500">
+                      <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
                         Starting Price
                       </p>
-
-                      <h4 className="mt-2 text-3xl font-black text-green-600">
-
+                      <p className="text-2xl font-black text-emerald-600">
                         {item.price}
-
-                      </h4>
-
+                      </p>
                     </div>
-
                   </div>
 
-                  {/* BUTTON */}
-                  <div className="mt-8 flex items-center justify-between rounded-2xl bg-green-50 px-6 py-5 transition group-hover:bg-green-100">
-
-                    <span className="text-lg font-bold text-slate-900">
-
+                  {/* Explore button – premium */}
+                  <div className="mt-6 flex cursor-pointer items-center justify-between rounded-xl border border-slate-100 bg-white px-5 py-4 transition-all group-hover:border-emerald-200 group-hover:bg-emerald-50/50">
+                    <span className="font-bold text-slate-700 group-hover:text-emerald-700">
                       Explore Destination
-
                     </span>
-
-                    <div className="rounded-2xl bg-green-600 p-4 text-white transition group-hover:translate-x-1">
-
-                      <ArrowRight size={22} />
-
+                    <div className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 p-2.5 text-white shadow-md transition-all group-hover:translate-x-1">
+                      <ArrowRight size={18} />
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
-
             </Link>
           ))}
-
         </div>
-
       </div>
-
     </section>
   );
 }
