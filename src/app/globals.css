@@ -251,4 +251,11 @@ body::before {
 }
 .dark ::-webkit-scrollbar-thumb {
   background: #334155;
+}@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+:root { --font-serif: 'Cormorant Garamond', serif; }@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+:root {
+  --font-serif: 'Cormorant Garamond', serif;
+}
+.font-serif {
+  font-family: var(--font-serif);
 }

@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
-
+import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import Image from "next/image";
 import {
   CalendarDays,
   Plane,
@@ -16,435 +12,222 @@ import {
   Star,
   Globe2,
   Users,
+  Clock,
+  Crown,
 } from "lucide-react";
-
-import {
-  getPackages,
-} from "@/src/services/package-service";
+import { getPackages } from "@/src/services/package-service";
 
 export default function PackagesPage() {
+  const [packages, setPackages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [packages, setPackages] =
-    useState<any[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  /* =========================
-     FETCH PACKAGES
-  ========================= */
   useEffect(() => {
-
     async function fetchPackages() {
-
       try {
-
-        const data =
-          await getPackages();
-
-        console.log(data);
-
-        setPackages(
-          data.data || []
-        );
-
+        const data = await getPackages();
+        setPackages(data.data || []);
       } catch (error) {
-
-        console.log(error);
-
+        console.error(error);
       } finally {
-
         setLoading(false);
-
       }
     }
-
     fetchPackages();
-
   }, []);
 
   return (
-    <main className="min-h-screen bg-white">
-
+    <main className="min-h-screen bg-[#fef7e8]">
       {/* =========================
-         HERO
+         VINTAGE HERO SECTION
       ========================= */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-black via-slate-950 to-slate-900 py-32 text-white">
-
-        {/* BACKGROUND */}
-        <div className="absolute inset-0">
-
-          <img
-            src="https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1600&auto=format&fit=crop"
-            className="h-full w-full object-cover opacity-25"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
-
-        </div>
-
-        <div className="container-custom relative">
-
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#2e241f] via-[#3a2c24] to-[#1c1814] py-28 text-[#ece2d4]">
+        {/* Antique pattern overlay */}
+        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"%3E%3Cpath fill="%23d9a13b" d="M40 0L50 12L40 24L30 12L40 0zM0 40L12 30L24 40L12 50L0 40zM80 40L68 30L56 40L68 50L80 40zM40 80L50 68L40 56L30 68L40 80z"/%3E%3C/svg%3E')] bg-repeat" />
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/70" />
+        <div className="absolute inset-0 bg-[url('/images/vintage-paper-texture.png')] opacity-20 mix-blend-multiply" />
+        
+        <div className="container-custom relative z-10">
           <div className="max-w-5xl">
-
-            {/* BADGE */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 backdrop-blur">
-
-              <ShieldCheck size={18} />
-
-              <span className="font-semibold">
-                Luxury Umrah & Global Packages
+            {/* Vintage badge */}
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-[#d9a13b]/40 bg-[#2e241f]/80 px-6 py-2.5 backdrop-blur-sm shadow-lg">
+              <Crown size={18} className="text-[#d9a13b]" />
+              <span className="font-serif text-sm font-bold tracking-wide text-[#d9a13b]">
+                EST. 2020 • TIMELESS TRAVEL
               </span>
-
             </div>
 
-            {/* TITLE */}
-            <h1 className="text-6xl font-black leading-tight lg:text-7xl">
-
+            <h1 className="font-serif text-6xl font-black leading-tight tracking-tight text-[#fef7e8] drop-shadow-xl md:text-7xl lg:text-8xl">
               Discover Premium
-              <span className="block text-green-400">
-                Travel Experiences
+              <span className="block bg-gradient-to-r from-[#d9a13b] via-[#e8c47f] to-[#b8860b] bg-clip-text text-transparent">
+                Vintage Journeys
               </span>
-
             </h1>
 
-            {/* DESCRIPTION */}
-            <p className="mt-8 max-w-4xl text-xl leading-10 text-slate-300">
-
-              Explore luxury Umrah, Hajj,
-              Dubai, Turkey and international
-              travel packages carefully crafted
-              for comfort, spirituality and
-              unforgettable memories.
-
+            <p className="mt-6 max-w-3xl font-sans text-xl leading-relaxed text-[#d6cfb8]">
+              Curated Umrah, Hajj, and global escapes – wrapped in old‑world elegance, 
+              modern comfort, and impeccable service. Each package tells a story.
             </p>
 
-            {/* QUICK FILTERS */}
-            <div className="mt-12 flex flex-wrap gap-4">
-
-              {[
-                "Umrah",
-                "Hajj",
-                "Dubai",
-                "Turkey",
-                "London",
-                "VIP Packages",
-              ].map((item) => (
-
+            {/* Vintage filter chips */}
+            <div className="mt-12 flex flex-wrap gap-3">
+              {["Umrah", "Hajj", "Dubai", "Turkey", "London", "VIP Collection"].map((item) => (
                 <button
                   key={item}
-                  className="rounded-full border border-white/10 bg-white/10 px-6 py-3 text-sm font-bold backdrop-blur transition hover:bg-green-600"
+                  className="rounded-full border border-[#d9a13b]/40 bg-[#2e241f]/60 px-6 py-2.5 font-serif text-sm font-semibold tracking-wide text-[#ece2d4] backdrop-blur transition-all hover:border-[#d9a13b] hover:bg-[#d9a13b] hover:text-[#1c1814]"
                 >
-
                   {item}
-
                 </button>
               ))}
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* =========================
-         PACKAGES
+         PACKAGES GRID – VINTAGE PRO MAX
       ========================= */}
-      <section className="py-24">
-
+      <section className="py-28">
         <div className="container-custom">
-
-          {/* TOP */}
-          <div className="mb-16 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-
-            <div>
-
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-green-100 px-5 py-2 text-sm font-bold text-green-700">
-
-                <Globe2 size={18} />
-
-                Premium Packages
-
-              </div>
-
-              <h2 className="text-5xl font-black text-slate-900">
-
-                Explore Travel Packages
-
-              </h2>
-
+          {/* Section header with antique flair */}
+          <div className="mb-20 flex flex-col items-center text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#e6e4d9] px-5 py-2 text-sm font-bold text-[#b8860b] shadow-inner">
+              <Globe2 size={18} className="text-[#b8860b]" />
+              <span className="font-serif tracking-wide">THE GRAND COLLECTION</span>
             </div>
-
-            <div className="flex items-center gap-3 rounded-full bg-green-50 px-5 py-3 text-sm font-bold text-green-700">
-
-              <Star
-                size={16}
-                className="fill-yellow-400 text-yellow-400"
-              />
-
-              Trusted by Thousands of Travelers
-
-            </div>
-
+            <h2 className="font-serif text-5xl font-black italic tracking-tight text-[#2e241f] md:text-6xl">
+              Our Finest Packages
+            </h2>
+            <div className="mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-[#d9a13b] to-[#b8860b]" />
+            <p className="mt-6 max-w-2xl font-sans text-lg text-[#5a4a3a]">
+              Handpicked for the discerning traveler – where heritage meets horizon.
+            </p>
           </div>
 
-          {/* LOADING */}
           {loading && (
-
-            <div className="flex items-center justify-center py-20">
-
-              <h2 className="text-3xl font-black">
-                Loading Packages...
-              </h2>
-
+            <div className="flex flex-col items-center justify-center py-32">
+              <div className="h-16 w-16 animate-spin rounded-full border-4 border-[#e6e4d9] border-t-[#d9a13b]" />
+              <p className="mt-6 font-serif text-2xl font-bold text-[#b8860b]">Unfolding vintage experiences...</p>
             </div>
           )}
 
-          {/* EMPTY */}
-          {!loading &&
-            packages.length === 0 && (
-
-            <div className="rounded-[36px] bg-slate-50 p-20 text-center">
-
-              <h2 className="text-4xl font-black text-slate-900">
-                No Packages Found
-              </h2>
-
+          {!loading && packages.length === 0 && (
+            <div className="rounded-[48px] border border-[#e2d5bd] bg-[#fffbf2] p-20 text-center shadow-xl">
+              <h2 className="font-serif text-4xl font-black text-[#2e241f]">No Packages Found</h2>
+              <p className="mt-3 font-sans text-[#8b7355]">Please check back later for new journeys.</p>
             </div>
           )}
 
-          {/* GRID */}
-          {!loading &&
-            packages.length > 0 && (
-
-            <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
-
-              {packages.map(
-                (item) => {
-
-                const spotsLeft =
-                  item.total_slots -
-                  item.booked_slots;
-
-                const progress =
-                  (item.booked_slots /
-                    item.total_slots) *
-                  100;
+          {!loading && packages.length > 0 && (
+            <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-3">
+              {packages.map((item) => {
+                const spotsLeft = item.total_slots - item.booked_slots;
+                const progress = (item.booked_slots / item.total_slots) * 100;
 
                 return (
-
                   <div
                     key={item.id}
-                    className="group overflow-hidden rounded-[40px] bg-white shadow-[0_20px_80px_rgba(15,23,42,0.08)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_100px_rgba(15,23,42,0.16)]"
+                    className="group relative overflow-hidden rounded-[32px] bg-[#fffbf2] shadow-[0_20px_40px_-12px_rgba(30,20,10,0.15)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_32px_56px_-16px_rgba(15,23,42,0.25)]"
                   >
-
-                    {/* IMAGE */}
+                    {/* Vintage border accent */}
+                    <div className="absolute inset-0 rounded-[32px] border border-[#e2d5bd] pointer-events-none" />
+                    
+                    {/* Image container with antique overlay */}
                     <div className="relative h-[320px] overflow-hidden">
-
                       <img
-                        src={
-                          item.image_url ||
-                          "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1600&auto=format&fit=crop"
-                        }
-                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                        src={item.image_url || "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1600&auto=format&fit=crop"}
+                        alt={item.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-
-                      {/* OVERLAY */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-
-                      {/* CATEGORY */}
-                      <div className="absolute left-5 top-5 rounded-full bg-green-600 px-4 py-2 text-sm font-bold text-white">
-
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1c1814]/80 via-[#1c1814]/20 to-transparent" />
+                      
+                      {/* Category badge – vintage gold */}
+                      <div className="absolute left-6 top-6 rounded-full bg-[#b8860b] px-5 py-2 text-sm font-serif font-bold tracking-wide text-[#fef7e8] shadow-lg">
                         {item.category}
-
                       </div>
-
-                      {/* PRICE */}
-                      <div className="absolute bottom-5 right-5 rounded-2xl bg-white/90 px-5 py-3 backdrop-blur">
-
-                        <h3 className="text-3xl font-black text-green-600">
-
-                          ₦
-                          {Number(
-                            item.price
-                          ).toLocaleString()}
-
-                        </h3>
-
+                      
+                      {/* Price medallion */}
+                      <div className="absolute bottom-6 right-6 rounded-xl border border-[#d9a13b]/40 bg-[#fffbf2]/90 px-5 py-2.5 backdrop-blur-sm shadow-lg">
+                        <p className="font-serif text-xs uppercase tracking-wider text-[#b8860b]">From</p>
+                        <p className="font-serif text-2xl font-black text-[#2e241f]">₦{Number(item.price).toLocaleString()}</p>
                       </div>
-
                     </div>
 
-                    {/* BODY */}
-                    <div className="p-8">
+                    {/* Content */}
+                    <div className="p-7">
+                      <h3 className="font-serif text-3xl font-black leading-tight text-[#2e241f]">{item.title}</h3>
+                      <p className="mt-4 line-clamp-3 font-sans text-base leading-relaxed text-[#5a4a3a]">{item.description}</p>
 
-                      {/* TITLE */}
-                      <h2 className="text-4xl font-black leading-tight text-slate-900">
-
-                        {item.title}
-
-                      </h2>
-
-                      {/* DESCRIPTION */}
-                      <p className="mt-6 line-clamp-3 text-lg leading-9 text-slate-600">
-
-                        {item.description}
-
-                      </p>
-
-                      {/* FEATURES */}
-                      <div className="mt-8 space-y-4">
-
-                        {/* FLIGHT */}
-                        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-5 py-4">
-
-                          <Plane className="text-green-600" />
-
-                          <span className="font-semibold text-slate-700">
-
-                            {item.flight_name}
-
-                          </span>
-
+                      {/* Travel details – vintage cards */}
+                      <div className="mt-6 space-y-3">
+                        <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
+                          <Plane size={20} className="text-[#b8860b]" />
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.flight_name}</span>
                         </div>
-
-                        {/* HOTEL */}
-                        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-5 py-4">
-
-                          <Hotel className="text-green-600" />
-
-                          <span className="font-semibold text-slate-700">
-
-                            {item.hotel_name}
-
-                          </span>
-
+                        <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
+                          <Hotel size={20} className="text-[#b8860b]" />
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.hotel_name}</span>
                         </div>
-
-                        {/* DATE */}
-                        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-5 py-4">
-
-                          <CalendarDays className="text-green-600" />
-
-                          <span className="font-semibold text-slate-700">
-
-                            {item.departure_date}
-
-                          </span>
-
+                        <div className="flex items-center gap-3 rounded-xl bg-[#efe6d7] px-4 py-3">
+                          <CalendarDays size={20} className="text-[#b8860b]" />
+                          <span className="font-serif font-semibold text-[#2e241f]">{item.departure_date}</span>
                         </div>
-
                       </div>
 
-                      {/* SLOT SECTION */}
-                      <div className="mt-8 rounded-3xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-5">
-
-                        {/* TOP */}
-                        <div className="mb-4 flex items-center justify-between">
-
+                      {/* Availability meter – antique style */}
+                      <div className="mt-8 rounded-2xl border border-[#e2d5bd] bg-gradient-to-br from-[#fef7e8] to-[#fffbf2] p-5">
+                        <div className="mb-3 flex items-center justify-between">
                           <div className="flex items-center gap-2">
-
-                            <Users
-                              size={20}
-                              className="text-green-600"
-                            />
-
-                            <span className="text-lg font-bold text-green-700">
-
-                              {spotsLeft}
-                              {" "}
-                              spots left
-
+                            <Users size={20} className="text-[#b8860b]" />
+                            <span className="font-serif font-bold text-[#b8860b]">
+                              {spotsLeft} spots left
                             </span>
-
                           </div>
-
-                          <span className="text-sm text-slate-500">
-
-                            {item.booked_slots}
-                            {" "}
-                            booked
-
-                          </span>
-
+                          <span className="font-sans text-sm text-[#8b7355]">{item.booked_slots} booked</span>
                         </div>
-
-                        {/* PROGRESS */}
-                        <div className="h-3 overflow-hidden rounded-full bg-slate-200">
-
+                        <div className="h-2 overflow-hidden rounded-full bg-[#e2d5bd]">
                           <div
-                            className="h-full rounded-full bg-green-600 transition-all duration-700"
-                            style={{
-                              width:
-                                `${progress}%`,
-                            }}
+                            className="h-full rounded-full bg-gradient-to-r from-[#d9a13b] to-[#b8860b] transition-all duration-1000"
+                            style={{ width: `${progress}%` }}
                           />
-
                         </div>
-
-                        {/* BOTTOM */}
-                        <div className="mt-3 text-sm text-slate-600">
-
-                          {item.booked_slots}
-                          {" "}
-                          of
-                          {" "}
-                          {item.total_slots}
-                          {" "}
-                          booked
-
+                        <div className="mt-2 text-right font-sans text-xs text-[#8b7355]">
+                          {item.booked_slots} of {item.total_slots} claimed
                         </div>
-
                       </div>
 
-                      {/* FOOTER */}
-                      <div className="mt-10 flex items-center justify-between">
-
+                      {/* Footer CTA */}
+                      <div className="mt-8 flex items-center justify-between">
                         <div>
-
-                          <p className="text-sm text-slate-500">
-                            Starting From
-                          </p>
-
-                          <h3 className="mt-2 text-4xl font-black text-green-600">
-
-                            ₦
-                            {Number(
-                              item.price
-                            ).toLocaleString()}
-
-                          </h3>
-
+                          <p className="font-serif text-xs uppercase tracking-wider text-[#b8860b]">Starting from</p>
+                          <p className="font-serif text-3xl font-black text-[#b8860b]">₦{Number(item.price).toLocaleString()}</p>
                         </div>
-
                         <Link
                           href={`/packages/${item.id}`}
-                          className="flex items-center gap-3 rounded-2xl bg-green-600 px-6 py-5 text-lg font-bold text-white shadow-lg shadow-green-500/20 transition hover:bg-green-700"
+                          className="group/btn flex items-center gap-2 rounded-full bg-[#b8860b] px-6 py-3 font-serif font-bold text-[#fef7e8] shadow-lg transition-all hover:bg-[#d9a13b] hover:shadow-xl"
                         >
-
-                          View
-
-                          <ArrowRight size={20} />
-
+                          View Journey
+                          <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
                         </Link>
-
                       </div>
-
                     </div>
 
+                    {/* Vintage decorative corner */}
+                    <div className="absolute bottom-3 right-3 opacity-20">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4L20 20M20 4L4 20" stroke="#b8860b" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    </div>
                   </div>
                 );
               })}
-
             </div>
           )}
-
         </div>
-
       </section>
 
+      {/* Vintage bottom ornament */}
+      <div className="relative mt-12 h-2 w-full bg-gradient-to-r from-transparent via-[#d9a13b] to-transparent" />
     </main>
   );
 }
