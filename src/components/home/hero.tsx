@@ -1,7 +1,10 @@
+"use client";
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
+// ... rest of your imports and code
 import {
   Search,
   MapPin,
