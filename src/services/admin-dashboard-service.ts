@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API =
-  "http://172.20.10.3:8000/api/v1";
+  "https://zainulabden-backend-production.up.railway.app/api/v1";
 
 export async function getDashboardStats(
   token: string

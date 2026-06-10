@@ -70,7 +70,7 @@ export default function RegisterPage() {
       setLoading(true);
 
       const res = await fetch(
-        "http://172.20.10.3:8000/api/v1/auth/register",
+        "https://zainulabden-backend-production.up.railway.app/api/v1/auth/register",
         {
           method: "POST",
 

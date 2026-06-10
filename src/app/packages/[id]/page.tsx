@@ -100,7 +100,7 @@ export default function PackageDetailsPage() {
       try {
 
         const res = await fetch(
-          `http://172.20.10.3:8000/api/v1/packages/${params.id}`
+          `https://zainulabden-backend-production.up.railway.app/api/v1/packages/${params.id}`
         );
 
         const data =
@@ -162,7 +162,7 @@ export default function PackageDetailsPage() {
       }
 
       const res = await fetch(
-        `http://172.20.10.3:8000/api/v1/bookings/create-and-pay?package_id=${pkg?.id}`,
+        `https://zainulabden-backend-production.up.railway.app/api/v1/bookings/create-and-pay?package_id=${pkg?.id}`,
         {
           method: "POST",
 

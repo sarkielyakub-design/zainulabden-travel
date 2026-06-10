@@ -63,7 +63,7 @@ export default function LoginPage() {
       // IMPORTANT:
       // Use CURRENT IP
       const res = await fetch(
-        "http://172.20.10.3:8000/api/v1/auth/login",
+        "https://zainulabden-backend-production.up.railway.app/api/v1/auth/login",
         {
           method: "POST",
 

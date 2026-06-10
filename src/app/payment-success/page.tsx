@@ -51,7 +51,7 @@ export default function PaymentSuccessPage() {
 
         const response =
           await fetch(
-            `http://172.20.10.3:8000/api/v1/bookings/verify/${ref}`,
+            `https://zainulabden-backend-production.up.railway.app/api/v1/bookings/verify/${ref}`,
             {
               headers: {
                 Authorization:

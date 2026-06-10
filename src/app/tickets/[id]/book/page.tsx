@@ -87,7 +87,7 @@ export default function TicketBookingPage() {
 
       const response =
         await axios.post(
-          `http://172.20.10.3:8000/api/v1/bookings/create-and-pay-ticket?ticket_id=${params.id}`,
+          `https://zainulabden-backend-production.up.railway.app/api/v1/bookings/create-and-pay-ticket?ticket_id=${params.id}`,
           formData,
           {
             headers: {

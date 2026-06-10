@@ -182,7 +182,7 @@ export default function TicketSection() {
               ) {
 
                 imageUrl =
-                  `http://172.20.10.3:8000${ticket.image}`;
+                  `https://zainulabden-backend-production.up.railway.app${ticket.image}`;
               }
 
               // FULL URL
