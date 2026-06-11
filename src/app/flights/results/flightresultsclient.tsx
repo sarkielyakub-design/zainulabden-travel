@@ -25,7 +25,7 @@ export default function FlightResultsClient() {
       const return_date = searchParams.get("return_date");
       const adults = Number(searchParams.get("adults")) || 1;
 
-      const response = await axios.post(`${API}/flights/search`, {
+      const response = await axios.post(`${API}/flights/flights/search`, {
         origin,
         destination,
         departure_date,
