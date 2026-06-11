@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Settings,
   BarChart3,
+  PlaneTakeoff,
 } from "lucide-react";
 
 import {
@@ -53,7 +54,11 @@ const links = [
     href: "/admin/bookings",
     icon: BookOpen,
   },
-
+{
+  name: "Flight Bookings",
+  href: "/admin/flight-bookings",
+  icon: PlaneTakeoff,
+},
   {
     name: "Payments",
     href: "/admin/payments",
