@@ -58,14 +58,14 @@ export default function FlightBookingPage() {
       setLoading(true);
 
       const response = await axios.post(
-        `${API}/flight-bookings/flight-bookings`,
+        `${API}/flight-bookings`,
         form
       );
 
       const booking = response.data;
 
       window.location.href =
-        `/flights/payment/${booking.id}`;
+        `/flights/payment`;
     } catch (error) {
       console.log(error);
       alert("Booking failed");
