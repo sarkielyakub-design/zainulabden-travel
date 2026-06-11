@@ -251,11 +251,58 @@ body::before {
 }
 .dark ::-webkit-scrollbar-thumb {
   background: #334155;
-}@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
-:root { --font-serif: 'Cormorant Garamond', serif; }@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
-:root {
-  --font-serif: 'Cormorant Garamond', serif;
 }
-.font-serif {
-  font-family: var(--font-serif);
+
+/* PREMIUM COMPONENTS */
+
+.hero-glass {
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.search-card {
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-large);
+  border-radius: 24px;
+}
+
+.premium-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-medium);
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.gold-text {
+  color: var(--gold);
+}
+
+.hover-lift {
+  transition: all .3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+.flight-search-bg {
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(16,185,129,.15),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(212,175,55,.12),
+      transparent 35%
+    );
 }

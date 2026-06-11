@@ -2,161 +2,52 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
 import {
-  Search,
-  Plane,
-  CalendarDays,
-  Users,
   ArrowLeftRight,
-  Loader2,
+  Search,
 } from "lucide-react";
 
 export default function FlightSearchEngine() {
   const router = useRouter();
 
-  const [loading, setLoading] =
-    useState(false);
+  const [tripType, setTripType] = useState("roundtrip");
+  const [origin, setOrigin] = useState("ABV");
+  const [destination, setDestination] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
+  const [adults, setAdults] = useState(1);
+  const [travelClass, setTravelClass] = useState("Economy");
 
-  const [tripType, setTripType] =
-    useState("roundtrip");
-
-  const [origin, setOrigin] =
-    useState("");
-
-  const [destination, setDestination] =
-    useState("");
-
-  const [departureDate, setDepartureDate] =
-    useState("");
-
-  const [returnDate, setReturnDate] =
-    useState("");
-
-  const [adults, setAdults] =
-    useState(1);
-
-  const [children, setChildren] =
-    useState(0);
-
-  const [infants, setInfants] =
-    useState(0);
-
-  const [travelClass, setTravelClass] =
-    useState("ECONOMY");
-
-  const airports = [
-    {
-      code: "ABV",
-      city: "Abuja",
-    },
-    {
-      code: "KAN",
-      city: "Kano",
-    },
-    {
-      code: "LOS",
-      city: "Lagos",
-    },
-    {
-      code: "JED",
-      city: "Jeddah",
-    },
-    {
-      code: "MED",
-      city: "Madinah",
-    },
-    {
-      code: "DXB",
-      city: "Dubai",
-    },
-    {
-      code: "IST",
-      city: "Istanbul",
-    },
-    {
-      code: "CAI",
-      city: "Cairo",
-    },
-    {
-      code: "LHR",
-      city: "London",
-    },
-  ];
-
-  const searchFlights =
-    async () => {
-      if (
-        !origin ||
-        !destination ||
-        !departureDate
-      ) {
-        alert(
-          "Please fill all required fields"
-        );
-        return;
-      }
-
-      try {
-        setLoading(true);
-
-        router.push(
-          `/flights/results?origin=${origin}&destination=${destination}&departure_date=${departureDate}&return_date=${returnDate}&adults=${adults}&children=${children}&infants=${infants}&travel_class=${travelClass}&trip_type=${tripType}`
-        );
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const searchFlights = () => {
+    router.push(
+      `/flights/results?origin=${origin}&destination=${destination}`
+    );
+  };
 
   return (
-    <div className="rounded-[32px] border bg-white p-8 shadow-2xl">
+    <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
 
-      <div className="mb-8">
+      {/* Tabs */}
 
-        <h2 className="text-4xl font-black text-slate-900">
-          Search Flights
-        </h2>
-
-        <p className="mt-2 text-slate-500">
-          Compare airlines and find
-          the best fares worldwide
-        </p>
-
-      </div>
-
-      {/* Trip Type */}
-
-      <div className="mb-8 flex gap-3">
+      <div className="flex border-b">
 
         <button
-          onClick={() =>
-            setTripType(
-              "roundtrip"
-            )
-          }
-          className={`rounded-xl px-6 py-3 font-bold transition ${
-            tripType ===
-            "roundtrip"
-              ? "bg-green-600 text-white"
-              : "bg-slate-100"
+          onClick={() => setTripType("roundtrip")}
+          className={`flex-1 py-4 text-lg font-semibold ${
+            tripType === "roundtrip"
+              ? "border-b-4 border-green-600 text-black"
+              : "text-slate-500"
           }`}
         >
           Round Trip
         </button>
 
         <button
-          onClick={() =>
-            setTripType(
-              "oneway"
-            )
-          }
-          className={`rounded-xl px-6 py-3 font-bold transition ${
-            tripType ===
-            "oneway"
-              ? "bg-green-600 text-white"
-              : "bg-slate-100"
+          onClick={() => setTripType("oneway")}
+          className={`flex-1 py-4 text-lg font-semibold ${
+            tripType === "oneway"
+              ? "border-b-4 border-green-600 text-black"
+              : "text-slate-500"
           }`}
         >
           One Way
@@ -164,279 +55,177 @@ export default function FlightSearchEngine() {
 
       </div>
 
-      {/* Airports */}
+      {/* From */}
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="border-b p-5">
 
-        <div>
+        <label className="mb-1 block text-sm text-slate-500">
+          Flying From
+        </label>
 
-          <label className="mb-2 block text-sm font-semibold">
-            Flying From
-          </label>
+        <select
+          value={origin}
+          onChange={(e) => setOrigin(e.target.value)}
+          className="w-full bg-transparent text-2xl font-bold outline-none"
+        >
+          <option value="ABV">
+            Abuja (ABV)
+          </option>
 
-          <select
-            value={origin}
-            onChange={(e) =>
-              setOrigin(
-                e.target.value
-              )
-            }
-            className="w-full rounded-xl border p-4"
-          >
-            <option value="">
-              Select Airport
-            </option>
+          <option value="KAN">
+            Kano (KAN)
+          </option>
 
-            {airports.map(
-              (airport) => (
-                <option
-                  key={
-                    airport.code
-                  }
-                  value={
-                    airport.code
-                  }
-                >
-                  {airport.city}
-                  {" "}
-                  (
-                  {airport.code}
-                  )
-                </option>
-              )
-            )}
+          <option value="LOS">
+            Lagos (LOS)
+          </option>
 
-          </select>
+        </select>
 
-        </div>
+      </div>
 
-        <div>
+      {/* To */}
 
-          <label className="mb-2 block text-sm font-semibold">
-            Destination
-          </label>
+      <div className="relative border-b p-5">
 
-          <select
-            value={
-              destination
-            }
-            onChange={(e) =>
-              setDestination(
-                e.target.value
-              )
-            }
-            className="w-full rounded-xl border p-4"
-          >
-            <option value="">
-              Select Destination
-            </option>
+        <button
+          onClick={() => {
+            const temp = origin;
+            setOrigin(destination);
+            setDestination(temp);
+          }}
+          className="absolute right-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-xl border bg-white shadow-sm"
+        >
+          <ArrowLeftRight size={18} />
+        </button>
 
-            {airports.map(
-              (airport) => (
-                <option
-                  key={
-                    airport.code
-                  }
-                  value={
-                    airport.code
-                  }
-                >
-                  {airport.city}
-                  {" "}
-                  (
-                  {airport.code}
-                  )
-                </option>
-              )
-            )}
+        <label className="mb-1 block text-sm text-slate-500">
+          Destination
+        </label>
 
-          </select>
+        <select
+          value={destination}
+          onChange={(e) =>
+            setDestination(e.target.value)
+          }
+          className="w-full bg-transparent pr-16 text-2xl font-bold outline-none"
+        >
+          <option value="">
+            Select Destination
+          </option>
 
-        </div>
+          <option value="JED">
+            Jeddah (JED)
+          </option>
+
+          <option value="MED">
+            Madinah (MED)
+          </option>
+
+          <option value="DXB">
+            Dubai (DXB)
+          </option>
+
+          <option value="IST">
+            Istanbul (IST)
+          </option>
+
+          <option value="LHR">
+            London (LHR)
+          </option>
+
+        </select>
 
       </div>
 
       {/* Dates */}
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+      <div className="border-b p-5">
 
-        <div>
+        <label className="mb-1 block text-sm text-slate-500">
+          Travel Dates
+        </label>
 
-          <label className="mb-2 block text-sm font-semibold">
-            Departure Date
-          </label>
+        <div className="grid grid-cols-2 gap-4">
 
           <input
             type="date"
-            value={
-              departureDate
-            }
+            value={departureDate}
             onChange={(e) =>
-              setDepartureDate(
-                e.target.value
-              )
+              setDepartureDate(e.target.value)
             }
-            className="w-full rounded-xl border p-4"
+            className="bg-transparent text-lg outline-none"
           />
 
-        </div>
-
-        {tripType ===
-          "roundtrip" && (
-          <div>
-
-            <label className="mb-2 block text-sm font-semibold">
-              Return Date
-            </label>
-
+          {tripType === "roundtrip" && (
             <input
               type="date"
-              value={
-                returnDate
-              }
+              value={returnDate}
               onChange={(e) =>
-                setReturnDate(
-                  e.target.value
-                )
+                setReturnDate(e.target.value)
               }
-              className="w-full rounded-xl border p-4"
+              className="bg-transparent text-lg outline-none"
             />
+          )}
 
-          </div>
-        )}
+        </div>
 
       </div>
 
-      {/* Passengers */}
+      {/* Travelers */}
 
-      <div className="mt-6 grid gap-5 md:grid-cols-4">
+      <div className="border-b p-5">
 
-        <div>
+        <label className="mb-1 block text-sm text-slate-500">
+          Travelers & Cabin
+        </label>
 
-          <label className="mb-2 block text-sm font-semibold">
-            Adults
-          </label>
-
-          <input
-            type="number"
-            min={1}
-            value={adults}
-            onChange={(e) =>
-              setAdults(
-                Number(
-                  e.target.value
-                )
-              )
-            }
-            className="w-full rounded-xl border p-4"
-          />
-
-        </div>
-
-        <div>
-
-          <label className="mb-2 block text-sm font-semibold">
-            Children
-          </label>
-
-          <input
-            type="number"
-            min={0}
-            value={children}
-            onChange={(e) =>
-              setChildren(
-                Number(
-                  e.target.value
-                )
-              )
-            }
-            className="w-full rounded-xl border p-4"
-          />
-
-        </div>
-
-        <div>
-
-          <label className="mb-2 block text-sm font-semibold">
-            Infants
-          </label>
-
-          <input
-            type="number"
-            min={0}
-            value={infants}
-            onChange={(e) =>
-              setInfants(
-                Number(
-                  e.target.value
-                )
-              )
-            }
-            className="w-full rounded-xl border p-4"
-          />
-
-        </div>
-
-        <div>
-
-          <label className="mb-2 block text-sm font-semibold">
-            Cabin Class
-          </label>
+        <div className="flex flex-wrap gap-3">
 
           <select
-            value={
-              travelClass
-            }
+            value={adults}
             onChange={(e) =>
-              setTravelClass(
-                e.target.value
-              )
+              setAdults(Number(e.target.value))
             }
-            className="w-full rounded-xl border p-4"
+            className="rounded-lg border px-3 py-2"
           >
-            <option value="ECONOMY">
-              Economy
-            </option>
+            {[1,2,3,4,5,6].map((n) => (
+              <option key={n}>
+                {n} Adult
+              </option>
+            ))}
+          </select>
 
-            <option value="PREMIUM_ECONOMY">
-              Premium Economy
-            </option>
-
-            <option value="BUSINESS">
-              Business
-            </option>
-
-            <option value="FIRST">
-              First Class
-            </option>
-
+          <select
+            value={travelClass}
+            onChange={(e) =>
+              setTravelClass(e.target.value)
+            }
+            className="rounded-lg border px-3 py-2"
+          >
+            <option>Economy</option>
+            <option>Premium Economy</option>
+            <option>Business</option>
+            <option>First Class</option>
           </select>
 
         </div>
 
       </div>
 
-      {/* Search Button */}
+      {/* Search */}
 
-      <button
-        onClick={searchFlights}
-        disabled={loading}
-        className="mt-8 flex w-full items-center justify-center rounded-xl bg-green-600 py-4 text-lg font-bold text-white transition hover:bg-green-700"
-      >
+      <div className="p-5">
 
-        {loading ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Searching Flights...
-          </>
-        ) : (
-          <>
-            <Search className="mr-2 h-5 w-5" />
-            Search Flights
-          </>
-        )}
+        <button
+          onClick={searchFlights}
+          className="flex h-14 w-full items-center justify-center rounded-2xl bg-green-600 text-lg font-bold text-white hover:bg-green-700"
+        >
+          <Search className="mr-2 h-5 w-5" />
+          Search Flights
+        </button>
 
-      </button>
+      </div>
 
     </div>
   );
