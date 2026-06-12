@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
+console.log("API =", API);
 
 export default function FlightBookingPage() {
   const [loading, setLoading] = useState(false);
@@ -91,6 +92,8 @@ export default function FlightBookingPage() {
 
     try {
       setLoading(true);
+      console.log("API =", API);
+console.log("URL =", `${API}/flight-bookings/`);
       const response = await axios.post(`${API}/flight-bookings/`, form);
       const booking = response.data;
       window.location.href = `/flights/payment/${booking.booking_id}`;
