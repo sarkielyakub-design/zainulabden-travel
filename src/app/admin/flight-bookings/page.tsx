@@ -24,15 +24,17 @@ export default function FlightBookingsPage() {
     useState("");
 
   const loadBookings = async () => {
-    try {
-      const data =
-        await getFlightBookings();
+  try {
+    const data = await getFlightBookings();
 
-      setBookings(data || []);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    console.log("BOOKINGS FROM API:", data);
+
+    setBookings(data);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   useEffect(() => {
     loadBookings();
