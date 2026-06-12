@@ -66,27 +66,38 @@ const response = await axios.get(
 };
 
 const payNow = async () => {
-if (!booking) return;
+  if (!booking) return;
 
-try {
-  setLoading(true);
-  const response = await axios.post(
-    `${API}/flight-payments/initialize`,
-    {
-      booking_id: booking.id,
+  try {
+    setLoading(true);
+
+    const response = await axios.post(
+      `${API}/flight-payments/initialize`,
+      {
+        booking_id: booking.id,
+      }
+    );
+
+    console.log("Payment Response:", response.data);
+
+    if (!response.data.payment_url) {
+      alert("No payment URL returned from backend.");
+      return;
     }
-  );
-  window.location.href =
-    response.data.authorization_url;
-} catch (error) {
-  console.log(error);
-  alert("Unable to initialize payment");
-} finally {
-  setLoading(false);
-}
 
+    window.location.href = response.data.payment_url;
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.response) {
+      alert(JSON.stringify(error.response.data, null, 2));
+    } else {
+      alert(error.message);
+    }
+  } finally {
+    setLoading(false);
+  }
 };
-
 if (!booking) {
 return (
   <div className="flex items-center justify-center min-h-screen">
