@@ -19,10 +19,13 @@ import {
   Briefcase,
   Crown,
 } from "lucide-react";
+console.log("ENV =", process.env.NEXT_PUBLIC_API_URL);
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://zainulabden-backend-production.up.railway.app/api/v1";
+
 console.log("API =", API);
-
 export default function FlightBookingPage() {
   const [loading, setLoading] = useState(false);
 
