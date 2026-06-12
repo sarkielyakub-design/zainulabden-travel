@@ -79,36 +79,83 @@ export default function FlightBookingPage() {
       [name]: name === "adults" ? parseInt(value) || 1 : value,
     }));
   };
+const createBooking = async () => {
+  // Validate required fields
+  const requiredFields = [
+    "first_name",
+    "last_name",
+    "email",
+    "phone",
+    "nationality",
+    "passport_number",
+    "passport_issue_date",
+    "passport_expiry_date",
+    "gender",
+    "date_of_birth",
+    "passport_issuing_country",
+  ];
 
-  const createBooking = async () => {
-    // Basic validation for required fields
-    const requiredFields = [
-      "first_name", "last_name", "email", "phone", "nationality",
-      "passport_number", "passport_issue_date", "passport_expiry_date",
-      "gender", "date_of_birth", "passport_issuing_country"
-    ];
-    const missing = requiredFields.filter(field => !form[field as keyof typeof form]);
-    if (missing.length > 0) {
-      alert(`Please fill in required fields: ${missing.join(", ")}`);
+  const missing = requiredFields.filter(
+    (field) => !form[field as keyof typeof form]
+  );
+
+  if (missing.length > 0) {
+    alert(`Please fill in required fields:\n\n${missing.join(", ")}`);
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    console.log("================================");
+    console.log("API:", API);
+    console.log("POST URL:", `${API}/flight-bookings/`);
+    console.log("REQUEST BODY:", form);
+
+    const response = await axios.post(
+      `${API}/flight-bookings/`,
+      form
+    );
+
+    console.log("FULL RESPONSE:", response);
+    console.log("RESPONSE DATA:", response.data);
+
+    // Show exactly what backend returned
+    alert(JSON.stringify(response.data, null, 2));
+
+    const booking = response.data;
+
+    console.log("booking =", booking);
+    console.log("booking_id =", booking.booking_id);
+
+    // Don't redirect if booking_id doesn't exist
+    if (!booking.booking_id) {
+      alert(
+        "Backend did not return booking_id.\n\nCheck the browser console."
+      );
       return;
     }
 
-    try {
-      setLoading(true);
-      console.log("API =", API);
-console.log("URL =", `${API}/flight-bookings/`);
-      const response = await axios.post(`${API}/flight-bookings/`, form);
-      const booking = response.data;
-      window.location.href = `/flights/payment/${booking.booking_id}`;
-    } catch (error: any) {
-      console.log(error);
-      console.log(error?.response?.data);
-      alert(error?.response?.data?.detail || "Booking failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Redirect
+    window.location.href = `/flights/payment/${booking.booking_id}`;
 
+  } catch (error: any) {
+    console.error("Booking Error:", error);
+
+    if (error.response) {
+      console.log("Status:", error.response.status);
+      console.log("Response:", error.response.data);
+
+      alert(
+        JSON.stringify(error.response.data, null, 2)
+      );
+    } else {
+      alert(error.message || "Booking failed");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
   // Helper for travel class display
   const getTravelClassDisplay = (cls: string) => {
     const map: Record<string, string> = {
