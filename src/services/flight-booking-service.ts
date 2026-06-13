@@ -5,15 +5,13 @@ const API =
 
 export const getFlightBookings = async () => {
   const res = await axios.get(
-    `${API}/flight-bookings`
+    `${API}/flight-bookings/`
   );
 
   return res.data;
 };
 
-export const confirmBooking = async (
-  id: number
-) => {
+export const confirmBooking = async (id: number) => {
   const res = await axios.put(
     `${API}/flight-bookings/${id}/confirm`
   );
@@ -21,9 +19,7 @@ export const confirmBooking = async (
   return res.data;
 };
 
-export const ticketBooking = async (
-  id: number
-) => {
+export const ticketBooking = async (id: number) => {
   const res = await axios.put(
     `${API}/flight-bookings/${id}/ticketed`
   );
