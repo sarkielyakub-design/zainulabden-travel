@@ -25,24 +25,14 @@ export default function FlightBookingsPage() {
 
   const loadBookings = async () => {
   try {
-    console.log("Loading flight bookings...");
-
     const data = await getFlightBookings();
 
     console.log("BOOKINGS FROM API:", data);
-    console.log("TOTAL BOOKINGS:", data.length);
 
     setBookings(data);
 
-  } catch (error: any) {
-    console.error("Flight Bookings Error:", error);
-
-    if (error.response) {
-      console.log("Status:", error.response.status);
-      console.log("Response:", error.response.data);
-    } else {
-      console.log(error.message);
-    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -70,17 +60,6 @@ export default function FlightBookingsPage() {
 
   return (
     <div className="space-y-6">
-        <div className="rounded-xl bg-blue-50 p-4 mb-4">
-  <h2 className="font-bold">
-    Debug Information
-  </h2>
-
-  <p>Total bookings: {bookings.length}</p>
-
-  <pre className="overflow-auto text-xs mt-3">
-    {JSON.stringify(bookings, null, 2)}
-  </pre>
-</div>
 
       {/* HEADER */}
       <div>
